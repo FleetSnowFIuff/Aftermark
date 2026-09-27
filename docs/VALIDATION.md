@@ -1,13 +1,13 @@
-# v0.1.3 validation
+# v0.1.4 validation
 
 Validated locally on Windows with Python 3.13.9:
 
-- 32 automated tests pass: project isolation, Chinese/English retrieval, corrections, revision-bound evidence, archiving, original-file backups and restore, source parsing, the HTTP workflow, and a real MCP stdio client/server process.
+- 35 automated tests pass: project isolation, Chinese/English retrieval, corrections, revision-bound evidence, archiving, original-file backups and restore, source parsing, the HTTP workflow, and a real MCP stdio client/server process.
 - Browser checks from v0.1.0: import examples, retrieve a Chinese task, save a scoped correction and see it immediately, switch languages, save a new note, and inspect generated MCP configuration. These do not verify subsequent UI changes.
 - Fresh Windows source installation through `setup.cmd` succeeds in a separate folder with a new virtual environment.
 - The source distribution and wheel build successfully. Static UI, example data, and the standalone introduction are included.
 
-The [CI template](ci-example.yml) covers Windows and Ubuntu with Python 3.11 and 3.13. It is not enabled: publishing GitHub workflows requires an additional workflow permission. To enable it, place the template at `.github/workflows/test.yml` after granting that permission. Remote jobs have not run. Specific coding-agent hosts are **not yet verified**. Protocol tests alone do not prove proactive tool use or product-specific configuration compatibility.
+The [CI template](ci-example.yml) covers Windows and Ubuntu with Python 3.11 and 3.13. It is not enabled: publishing GitHub workflows requires an additional workflow permission. To enable it, place the template at `.github/workflows/test.yml` after granting that permission. Remote jobs have not run. Real Codex CLI acceptance is documented in [CODEX.md](CODEX.md); desktop and other hosts are pending. Protocol tests alone do not prove proactive tool use or host compatibility.
 
 ## Short manual acceptance
 
@@ -26,3 +26,5 @@ v0.1.2 checks additionally cover correction-only matches in English/Chinese, bot
 v0.1.3 checks cover real two-page PDF extraction and original bytes, page-specific reads, SRT/VTT timings, CRLF input, Unicode offsets, bounded pagination, missing anchors, stale revisions, project scope and archived sources. A real MCP subprocess reads a selected PDF page and rejects its stale revision after a correction. Browser execution could not start in this environment; the new location selector and copy-citation action still need a browser check. The schema remains 2.
 
 The v0.1.3 wheel was installed in a separate virtual environment. Its CLI successfully read a scoped PDF page with a revision-bearing citation, and `doctor` passed through the installed package's real MCP subprocess.
+
+For v0.1.4, tests cover Codex registration preview, explicit apply, preserving existing or conflicting entries, missing CLI, and MCP tool read/write annotations. Real Codex runs exposed a default non-interactive approval failure. A normally reviewed run completed recall/read/record; a fresh task with project guidance read a new correction but did not record usage automatically. Desktop visibility and browser UI acceptance remain pending. See [client evidence](CODEX.md).

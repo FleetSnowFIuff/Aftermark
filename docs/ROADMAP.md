@@ -22,6 +22,8 @@ v0.1.2 adds scoped correction retrieval, visible match locations, stale-evidence
 
 v0.1.3 adds PDF page and subtitle segment navigation, revision-bearing citations, and scoped segment reads shared by CLI and MCP.
 
+v0.1.4 adds explicit Codex registration, MCP tool annotations and real CLI evidence. Project-guided recall worked in one fresh task; usage logging was not automatic. Desktop and real code-change acceptance are the next priority.
+
 Remaining work stays focused:
 
 - Test the documented setup with a small number of real hosts; publish the actual compatibility results.

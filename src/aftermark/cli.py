@@ -22,6 +22,9 @@ def parser() -> argparse.ArgumentParser:
     serve.add_argument("--open", action="store_true", help="Open the browser automatically")
     commands.add_parser("mcp", help="Run the MCP server over stdio")
     commands.add_parser("config", help="Print MCP configuration and suggested host instructions")
+    connect = commands.add_parser("connect", help="Preview or explicitly register a host connection")
+    connect.add_argument("host", choices=["codex"])
+    connect.add_argument("--apply", action="store_true", help="Register Aftermark through codex mcp add; preserve conflicting entries")
     commands.add_parser("doctor", help="Check the real local MCP connection without writing bookmarks")
     commands.add_parser("status", help="Show version and database location")
     commands.add_parser("examples", help="Import three small, original example bookmarks")
@@ -105,6 +108,9 @@ def run(args):
         return
     if args.command == "config":
         result = config(store.home)
+    elif args.command == "connect":
+        from .codex import connect
+        result = connect(store.home, args.apply)
     elif args.command == "doctor":
         import anyio
         from .diagnostics import check_connection

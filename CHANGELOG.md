@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4 — 2026-09-27
+
+- Add explicit `connect codex` preview/apply commands, preserve conflicting registrations and provide a copyable command in the bilingual UI.
+- Declare MCP read/write and local-only tool annotations without bypassing client approvals.
+- Add project instructions and real Codex CLI evidence: explicit recall/read/record passed; a fresh project-guided task used a new correction but did not record usage automatically.
+- Document the initial approval failure and pending desktop acceptance. The synthetic checklist task does not establish engineering gains.
+
 ## 0.1.3 — 2026-09-27
 
 - Derive PDF page and SRT/VTT subtitle locations from saved text, and include relevant locations in task recall.

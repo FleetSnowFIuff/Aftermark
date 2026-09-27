@@ -1,0 +1,83 @@
+{
+  "date": "2026-09-27",
+  "client": "codex-cli 0.158.0-alpha.2.1",
+  "configured_model": "gpt-6-astra",
+  "test_type": "synthetic acceptance fixture, not a real engineering improvement",
+  "project": "Aftermark",
+  "runs": [
+    {
+      "run": "events.log",
+      "sha256": "719a2570a14b2617a1e5b7ec99c261465d553fd936e9bf8577ceb63bd83e494a",
+      "calls": [
+        {
+          "tool": "recall",
+          "status": "failed",
+          "project": "Aftermark",
+          "error": {
+            "message": "MCP tool call requires approval, but approval policy is never"
+          }
+        }
+      ]
+    },
+    {
+      "run": "events-approved.log",
+      "sha256": "a718596d19e397195f47913f2f8cbef1c3ea96ae827f2ff8f4631dabd720a7a9",
+      "calls": [
+        {
+          "tool": "recall",
+          "status": "completed",
+          "project": "Aftermark",
+          "error": null,
+          "candidate_ids": [
+            "f8164592-a58d-414a-a7f3-ffa63e6f12c6"
+          ]
+        },
+        {
+          "tool": "read_bookmark",
+          "status": "completed",
+          "project": "Aftermark",
+          "error": null,
+          "bookmark_id": "f8164592-a58d-414a-a7f3-ffa63e6f12c6",
+          "revision": 2,
+          "corrections": 1
+        },
+        {
+          "tool": "record_usage",
+          "status": "completed",
+          "project": "Aftermark",
+          "error": null,
+          "record_id": "9fa2334f-a3e2-4aee-84e3-dd3c6766ae4f",
+          "bookmark_id": "f8164592-a58d-414a-a7f3-ffa63e6f12c6",
+          "revision": 2,
+          "outcome": "referenced"
+        }
+      ]
+    },
+    {
+      "run": "events-project-guidance.log",
+      "sha256": "2573548870783ef98b64f249c74b213e7e1f8a74ffd0393c2ec1f93d4d67dc99",
+      "calls": [
+        {
+          "tool": "recall",
+          "status": "completed",
+          "project": "Aftermark",
+          "error": null,
+          "candidate_ids": [
+            "f8164592-a58d-414a-a7f3-ffa63e6f12c6"
+          ]
+        },
+        {
+          "tool": "read_bookmark",
+          "status": "completed",
+          "project": "Aftermark",
+          "error": null,
+          "bookmark_id": "f8164592-a58d-414a-a7f3-ffa63e6f12c6",
+          "revision": 3,
+          "corrections": 2
+        }
+      ]
+    }
+  ],
+  "desktop_current_thread": "pending: server not yet visible in desktop settings",
+  "no_reminder_run": "Project AGENTS.md present; latest task did not name MCP or tools. Recalled and read revision 3; did NOT record usage."
+}

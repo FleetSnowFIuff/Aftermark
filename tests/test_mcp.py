@@ -10,6 +10,9 @@ def test_real_stdio_roundtrip(tmp_path):
         async with Client(params) as client:
             tools = await client.list_tools()
             assert {tool.name for tool in tools.tools} == {"recall", "read_bookmark", "save_bookmark", "record_usage", "add_correction"}
+            for tool in tools.tools:
+                assert tool.annotations.read_only_hint == (tool.name in {"recall", "read_bookmark"})
+                assert tool.annotations.open_world_hint is False
             saved = await client.call_tool("save_bookmark", {"title": "Jump buffer", "content": "Keep recent jump input", "intent": "Keep the buttons", "project": "game", "role": "method"})
             item_id = saved.structured_content["id"]
             empty = await client.call_tool("recall", {"task": "jump", "project": "other"})

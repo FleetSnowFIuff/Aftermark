@@ -12,7 +12,7 @@
 
 ## 启动
 
-需要 **Python 3.11+**。[下载 v0.1.3 源码](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.3.zip) 并解压，或克隆本仓库。
+需要 **Python 3.11+**。[下载 v0.1.4 源码](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.4.zip) 并解压，或克隆本仓库。
 
 | 平台 | 首次安装 | 打开应用 |
 | --- | --- | --- |
@@ -42,7 +42,20 @@
 | 记录 | 仅参考、已采用、已验证、未采用 | 采用和验证必须附证据；系统不替你验证证据 |
 | 迁移 | JSON 导入/导出，包括原文件和历史 | 已存在 ID 跳过，不隐式覆盖 |
 
-## v0.1.3 新增
+## v0.1.4：真实 Codex 接入验收
+
+真实 Codex CLI 已完成「检索 → 阅读来源和纠正 → 记录仅参考」。另一个新任务在项目常驻指引下，无需重复提醒工具名，也读到了最新纠正；但没有自动写使用记录。**桌面当前对话仍待验收**。完整结果见 [接入与验收记录](docs/CODEX.md)。
+
+激活虚拟环境后执行：
+
+```sh
+aftermark --data-dir .local/library connect codex
+aftermark --data-dir .local/library connect codex --apply
+```
+
+第一条预览，第二条通过 Codex 官方 CLI 注册。冲突配置不会被覆盖；界面「连接 Agent」也提供包含实际路径的可复制命令。MCP 工具补充只读/写入标记，调用仍遵循客户端审批。
+
+## v0.1.3 的来源定位
 
 检索后可以直接查看对应的 PDF 页或字幕时间段，并复制包含收藏 ID 和版本号的引用。详情页提供来源位置选择。
 
