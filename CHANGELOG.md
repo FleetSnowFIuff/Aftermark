@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Point the introduction page’s install button directly to its setup section.
+
 ## 0.1.1 — 2026-09-27
 
 - Save imported tags, source text and original files in one operation; reject invalid tags before writing. Imports start at revision 1.
