@@ -55,3 +55,10 @@ def test_invalid_format_and_size_are_clear(monkeypatch):
     monkeypatch.setattr(ingest, "MAX_FILE_BYTES", 3)
     with pytest.raises(ValueError, match="20 MB"):
         ingest.parse_file("note.txt", b"longer")
+
+
+def test_import_tags_follow_the_same_validation_as_notes():
+    item, _ = ingest.parse_file("note.txt", b"text", tags=["tag", " tag "])
+    assert item.tags == ["tag"]
+    with pytest.raises(ValueError):
+        ingest.parse_file("note.txt", b"text", tags=[str(i) for i in range(21)])

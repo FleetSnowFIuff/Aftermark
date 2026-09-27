@@ -1,6 +1,6 @@
 # Aftermark
 
-[GitHub](https://github.com/FleetSnowFIuff/Aftermark) · [MIT](LICENSE)
+[GitHub](https://github.com/FleetSnowFIuff/Aftermark) · [MIT](LICENSE) · [Changelog](CHANGELOG.md)
 
 **收藏好方法，让你的 Agent 下次用上。**
 
@@ -12,15 +12,16 @@
 
 ## 启动
 
-需要 Python 3.11 或更新版本。在项目文件夹中执行：
+需要 **Python 3.11+**。[下载 v0.1.1 源码](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.1.zip) 并解压，或克隆本仓库。
 
-```powershell
-python -m venv .venv
-.venv\Scripts\python -m pip install -e .
-.venv\Scripts\aftermark serve --open
-```
+| 平台 | 首次安装 | 打开应用 |
+| --- | --- | --- |
+| Windows | 双击 `setup.cmd` | 双击 `start-aftermark.cmd` |
+| macOS / Linux | `sh setup.sh` | `sh start-aftermark.sh` |
 
-Windows 安装完成后也可双击 `start-aftermark.cmd`；这个启动器把数据放在工程内的 `.local/library`，便于整目录迁移。
+启动脚本统一使用工程内的 `.local/library`。连接 Agent 时，请从界面复制这个收藏库的配置。命令行访问同一份数据时，Windows 使用 `.venv\Scripts\aftermark --data-dir .local/library ...`，macOS/Linux 使用 `.venv/bin/aftermark --data-dir .local/library ...`。直接运行不带 `--data-dir` 的 `aftermark` 会访问下文说明的系统默认库，两者不会自动合并。
+
+也可以手动创建虚拟环境，然后在其中执行 `python -m pip install -e .`。项目尚未发布到 PyPI，请使用源码安装。
 
 访问 **http://127.0.0.1:43821**。macOS/Linux 将 `.venv\Scripts\` 换为 `.venv/bin/`。
 

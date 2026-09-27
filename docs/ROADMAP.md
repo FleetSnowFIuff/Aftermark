@@ -16,7 +16,9 @@ Acceptance: start from a clean installation, save a source, find it in the right
 
 ## v0.1.x — Fix what real use reveals
 
-One short hardening pass, not new subsystems:
+v0.1.1 delivers atomic tagged imports, source-title defaults, archived project filters, portable setup scripts and synchronized installation guidance.
+
+Remaining work stays focused:
 
 - Test the documented setup with a small number of real hosts; publish the actual compatibility results.
 - Improve empty states, keyboard flow, import errors, install instructions and source display.

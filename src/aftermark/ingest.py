@@ -27,7 +27,7 @@ def extract_html(data: bytes, url: str) -> tuple[str, str]:
     return str(title)[:240], text
 
 
-def fetch_page(url: str, *, title: str = "", intent: str = "", project: str = "", role: str = "reference") -> ItemInput:
+def fetch_page(url: str, *, title: str = "", intent: str = "", project: str = "", role: str = "reference", tags: list[str] | None = None) -> ItemInput:
     # Validate the input at the network boundary; imported pages remain data.
     ItemInput(title=title or url[:240], source_url=url)
     with httpx.Client(timeout=20, follow_redirects=True, max_redirects=5) as client:
@@ -49,11 +49,11 @@ def fetch_page(url: str, *, title: str = "", intent: str = "", project: str = ""
             else:
                 page_title, content = extract_html(data, str(response.url))
     return ItemInput(title=title or page_title, content=content, kind="web", source_url=url,
-                     intent=intent, project=project, role=role)
+                     intent=intent, project=project, role=role, tags=tags or [])
 
 
 def parse_file(filename: str, data: bytes, *, title: str = "", intent: str = "", project: str = "",
-               role: str = "reference", source_url: str = "") -> tuple[ItemInput, tuple[str, str, bytes]]:
+               role: str = "reference", source_url: str = "", tags: list[str] | None = None) -> tuple[ItemInput, tuple[str, str, bytes]]:
     name = Path(filename.replace("\\", "/")).name
     if len(data) > MAX_FILE_BYTES:
         raise ValueError("File exceeds the 20 MB import limit.")
@@ -80,5 +80,5 @@ def parse_file(filename: str, data: bytes, *, title: str = "", intent: str = "",
     else:
         raise ValueError("Supported files: PDF, Markdown, TXT, SRT, and VTT.")
     item = ItemInput(title=title or Path(name).stem, content=content, kind=kind, source_name=name,
-                     intent=intent, project=project, role=role, source_url=source_url)
+                     intent=intent, project=project, role=role, source_url=source_url, tags=tags or [])
     return item, (name, mime, data)

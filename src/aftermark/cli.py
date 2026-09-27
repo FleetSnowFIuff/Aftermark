@@ -102,20 +102,18 @@ def run(args):
     elif args.command == "examples":
         result = store.import_bundle(Bundle.model_validate_json((Path(__file__).parent / "data/examples.json").read_text(encoding="utf-8")))
     elif args.command == "add":
-        common = dict(title=args.title, intent=args.intent, project=args.project, role=args.role)
+        common = dict(title=args.title, intent=args.intent, project=args.project, role=args.role, tags=args.tag)
         if args.file:
             item, attachment = parse_file(args.file.name, args.file.read_bytes(), **common)
-            item.tags = args.tag
             result = store.create(item, attachment)
         elif args.url and args.fetch:
             item = fetch_page(args.url, **common)
-            item.tags = args.tag
             result = store.create(item)
         else:
             if not args.title:
                 raise ValueError("Give the bookmark a --title.")
             kind = "web" if args.url and args.kind == "note" else args.kind
-            result = store.create(ItemInput(**common, content=args.text or "", source_url=args.url or "", kind=kind, tags=args.tag))
+            result = store.create(ItemInput(**common, content=args.text or "", source_url=args.url or "", kind=kind))
     elif args.command == "list":
         result = store.list(args.query, args.project, args.archived)
     elif args.command == "show":

@@ -1,6 +1,6 @@
 # Aftermark
 
-[GitHub](https://github.com/FleetSnowFIuff/Aftermark) · [MIT](LICENSE)
+[GitHub](https://github.com/FleetSnowFIuff/Aftermark) · [MIT](LICENSE) · [Changelog](CHANGELOG.md)
 
 **Save what works. Teach your agent when to use it.**
 
@@ -12,17 +12,16 @@ Aftermark is a local bookmark library for coding agents. Keep a source, why you 
 
 ## Start locally
 
-Requires Python 3.11 or newer. From this repository:
+Requires **Python 3.11+**. [Download v0.1.1](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.1.zip) and extract it, or clone this repository.
 
-```sh
-python -m venv .venv
-# Windows:
-.venv\Scripts\python -m pip install -e .
-.venv\Scripts\aftermark serve --open
-# macOS / Linux:
-.venv/bin/python -m pip install -e .
-.venv/bin/aftermark serve --open
-```
+| Platform | Install once | Open the app |
+| --- | --- | --- |
+| Windows | Double-click `setup.cmd` | Double-click `start-aftermark.cmd` |
+| macOS / Linux | `sh setup.sh` | `sh start-aftermark.sh` |
+
+These scripts use `.local/library` inside the project for your data. In **Connect an agent**, copy configuration for that exact library. For CLI access to it, use `.venv/Scripts/aftermark --data-dir .local/library ...` on Windows or `.venv/bin/aftermark --data-dir .local/library ...` on macOS/Linux. Running plain `aftermark` without `--data-dir` uses the separate system-default library described below.
+
+Manual installation: create a virtual environment, then run `python -m pip install -e .` in it. Aftermark is not yet published to PyPI; `pip install aftermark` is not the documented installation route.
 
 Open **http://127.0.0.1:43821**. No account, model download, or extra model API key is required. Installation and fetching external pages require internet access; notes, search, PDF parsing, and the local UI work offline after installation.
 

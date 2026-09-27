@@ -38,3 +38,38 @@ def test_local_service_rejects_other_origins_and_hosts(tmp_path):
         assert client.post("/api/examples").status_code == 200
         assert client.post("/api/examples").json()["imported"] == 0
         assert client.get("/api/items/not-here").status_code == 404
+
+
+def test_import_keeps_tags_title_and_original_in_one_revision(tmp_path, monkeypatch):
+    import httpx
+    from aftermark import ingest
+
+    client_type = httpx.Client
+    transport = httpx.MockTransport(lambda request: httpx.Response(
+        200, headers={"Content-Type": "text/html"},
+        content=b"<title>Original title</title><article>Useful material</article>"))
+    monkeypatch.setattr(ingest.httpx, "Client", lambda **kw: client_type(transport=transport, **kw))
+    with TestClient(create_app(tmp_path)) as client:
+        imported = client.post("/api/import/web", json={"url": "https://example.com", "tags": [" recall ", "recall"]})
+        assert imported.status_code == 201
+        item = imported.json()
+        assert (item["title"], item["tags"], item["revision"]) == ("Original title", ["recall"], 1)
+        assert client.post("/api/recall", json={"task": "recall"}).json()["candidates"][0]["id"] == item["id"]
+        pdf = client.post("/api/import/file", files={"file": ("Original paper.pdf", text_pdf())}, data={"tags": ["paper", " paper "]})
+        assert pdf.status_code == 201
+        item = pdf.json()
+        assert (item["title"], item["tags"], item["revision"]) == ("Original paper", ["paper"], 1)
+        assert client.get(f"/api/items/{item['id']}/original").content == text_pdf()
+        before = len(client.get("/api/items").json())
+        bad = client.post("/api/import/file", files={"file": ("invalid.txt", b"text")}, data={"tags": [str(i) for i in range(21)]})
+        assert bad.status_code == 422
+        assert len(client.get("/api/items").json()) == before
+
+
+def test_archived_only_projects_remain_selectable(tmp_path):
+    with TestClient(create_app(tmp_path)) as client:
+        saved = client.post("/api/items", json={"title": "Scoped", "content": "text", "project": "retired"}).json()
+        client.patch(f"/api/items/{saved['id']}/archive", json={"archived": True})
+        assert client.get("/api/projects").json() == ["retired"]
+        assert client.get("/api/items").json() == []
+        assert client.get("/api/items?archived=true&project=retired").json()[0]["id"] == saved["id"]

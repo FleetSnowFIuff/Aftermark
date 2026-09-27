@@ -2,3 +2,5 @@ include README.zh-CN.md
 recursive-include docs *.md *.yml
 recursive-include tests *.py
 recursive-include website *.html
+include CHANGELOG.md setup.cmd setup.sh start-aftermark.cmd start-aftermark.sh
+recursive-include scripts *.py

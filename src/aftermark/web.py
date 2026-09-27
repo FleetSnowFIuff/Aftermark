@@ -3,6 +3,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 import httpx
+from pydantic import Field
 from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
@@ -23,6 +24,7 @@ class WebImport(InputModel):
     intent: str = ""
     project: str = ""
     role: str = "reference"
+    tags: list[str] = Field(default_factory=list)
 
 
 class ArchiveInput(InputModel):
@@ -68,6 +70,10 @@ def create_app(home: Path | str | None = None) -> FastAPI:
         records = store.list(q, project, archived)
         return [{**item, "content": item["content"][:280]} for item in records]
 
+    @app.get("/api/projects")
+    def projects():
+        return store.projects()
+
     @app.post("/api/items", status_code=201)
     def create(value: ItemInput):
         return store.create(value)
@@ -105,10 +111,10 @@ def create_app(home: Path | str | None = None) -> FastAPI:
 
     @app.post("/api/import/file", status_code=201)
     async def import_file(file: UploadFile = File(...), title: str = Form(""), intent: str = Form(""),
-                          project: str = Form(""), role: str = Form("reference"), source_url: str = Form("")):
+                          project: str = Form(""), role: str = Form("reference"), source_url: str = Form(""), tags: list[str] = Form([])):
         data = await file.read(MAX_FILE_BYTES + 1)
         item, attachment = parse_file(file.filename or "", data, title=title, intent=intent,
-                                      project=project, role=role, source_url=source_url)
+                                      project=project, role=role, source_url=source_url, tags=tags)
         return store.create(item, attachment)
 
     @app.post("/api/recall")

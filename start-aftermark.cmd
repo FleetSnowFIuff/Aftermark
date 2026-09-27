@@ -1,7 +1,7 @@
 @echo off
 cd /d "%~dp0"
 if not exist ".venv\Scripts\python.exe" (
-  echo Create the environment first. See README.zh-CN.md.
+  echo Run setup.cmd first. Python 3.11 or newer is required.
   pause
   exit /b 1
 )

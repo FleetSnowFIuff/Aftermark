@@ -150,6 +150,10 @@ class Store:
             db.execute("UPDATE items SET archived=?,updated_at=? WHERE id=?", (int(archived), now(), item_id))
         return self.get(item_id)
 
+    def projects(self) -> list[str]:
+        with self.connection() as db:
+            return [r[0] for r in db.execute("SELECT DISTINCT project FROM items WHERE project != '' ORDER BY project")]
+
     def list(self, query: str = "", project: str | None = None, archived: bool = False) -> list[dict]:
         sql = "SELECT * FROM items WHERE archived=?"
         params: list = [int(archived)]
