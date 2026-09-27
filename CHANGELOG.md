@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3 — 2026-09-27
+
+- Derive PDF page and SRT/VTT subtitle locations from saved text, and include relevant locations in task recall.
+- Read a selected source segment through the shared CLI/MCP reader, with bounded pagination, project scope and optional revision checks.
+- Add a source-location selector and copyable revision-bearing citations to the bilingual local UI.
+- Keep original files, backup format and database schema unchanged. Locations describe saved text; no video analysis or inferred timestamps.
+
 ## 0.1.2 — 2026-09-27
 
 - Search relevant corrections as well as source text, with both bookmark and correction project scopes enforced. Show where each result matched.

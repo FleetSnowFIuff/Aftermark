@@ -12,7 +12,7 @@ Aftermark is a local bookmark library for coding agents. Keep a source, why you 
 
 ## Start locally
 
-Requires **Python 3.11+**. [Download v0.1.2](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.2.zip) and extract it, or clone this repository.
+Requires **Python 3.11+**. [Download v0.1.3](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.3.zip) and extract it, or clone this repository.
 
 | Platform | Install once | Open the app |
 | --- | --- | --- |
@@ -36,7 +36,19 @@ Try **Import three examples**, then **Use in a task** with `jump input buffering
 - Original uploaded files retained locally. JSON backup/import includes sources, attachments, corrections, and usage; existing IDs are skipped instead of overwritten.
 - Chinese/English local UI, CLI, and a standard MCP stdio server sharing one SQLite database.
 
-## New in v0.1.2
+## New in v0.1.3
+
+Open the exact PDF page or saved subtitle segment behind a result. The source viewer has a location selector and a copy-citation action; citations include the bookmark ID and revision.
+
+`recall` returns `excerpt_locations`. Pass a returned location ID and revision to MCP `read_bookmark` (`anchor`, `expected_revision`), or use the CLI:
+
+```sh
+aftermark read BOOKMARK_ID --project my-project --anchor page-2 --revision 1
+```
+
+Use the actual ID and revision returned by recall. Reads preserve project scope and reject a changed revision. `--offset` is relative to the selected segment; `--limit` bounds the returned text. PDF pages and SRT/VTT timestamps come from saved text, not video analysis. Untimed text remains readable without invented locations. Database schema stays at 2.
+
+## Also included from v0.1.2
 
 Task retrieval also searches corrections that apply to the current project, and reports whether the match came from the title, intent, source, tags, or corrections. Source and correction rankings are combined; this remains keyword retrieval, not semantic understanding.
 

@@ -43,6 +43,13 @@ def parser() -> argparse.ArgumentParser:
     listing.add_argument("--archived", action="store_true")
     read = commands.add_parser("show")
     read.add_argument("id")
+    excerpt = commands.add_parser("read", help="Read a scoped source slice or PDF/subtitle location")
+    excerpt.add_argument("id")
+    excerpt.add_argument("--project", default="")
+    excerpt.add_argument("--anchor", default="")
+    excerpt.add_argument("--offset", type=int, default=0)
+    excerpt.add_argument("--limit", type=int, default=12000)
+    excerpt.add_argument("--revision", type=int)
     recall = commands.add_parser("recall")
     recall.add_argument("task")
     recall.add_argument("--project", default="")
@@ -123,6 +130,8 @@ def run(args):
         result = store.list(args.query, args.project, args.archived)
     elif args.command == "show":
         result = store.get(args.id)
+    elif args.command == "read":
+        result = store.read(args.id, args.project, args.offset, args.limit, args.anchor, args.revision)
     elif args.command == "recall":
         result = store.recall(args.task, args.project, args.limit)
     elif args.command == "correct":

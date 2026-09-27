@@ -25,22 +25,10 @@ def create_server(store: Store) -> MCPServer:
         return store.recall(query.task, query.project, query.limit)
 
     @server.tool()
-    def read_bookmark(bookmark_id: str, project: str = "", offset: int = 0, limit: int = 12000) -> dict[str, Any]:
-        """Read a bookmark's source text in bounded pages. Includes only corrections and usage relevant to the current project. Does not mark it as used."""
-        if offset < 0 or not 1 <= limit <= 20000:
-            raise ValueError("offset must be non-negative; limit must be 1..20000.")
-        item = store.get(bookmark_id)
-        if item["archived"]:
-            raise ValueError("This bookmark is archived.")
-        if item["project"] and item["project"] != project:
-            raise ValueError("This bookmark belongs to another project.")
-        content = item["content"]
-        item["content"] = content[offset:offset + limit]
-        item["total_chars"] = len(content)
-        item["next_offset"] = offset + limit if offset + limit < len(content) else None
-        item["corrections"] = [c for c in item["corrections"] if c["project"] in {"", project}]
-        item["usage"] = [u for u in item["usage"] if u["project"] == project][:10]
-        return item
+    def read_bookmark(bookmark_id: str, project: str = "", offset: int = 0, limit: int = 12000,
+                      anchor: str = "", expected_revision: int | None = None) -> dict[str, Any]:
+        """Read source text and citation locations. Use an anchor ID from recall/read to select a PDF page or subtitle cue. Offset is relative to the selected anchor, or the full text if no anchor. Pass expected_revision to reject stale locations. Locations come from saved text, not independently verified originals. Does not record usage."""
+        return store.read(bookmark_id, project, offset, limit, anchor, expected_revision)
 
     @server.tool()
     def save_bookmark(title: str, content: str = "", intent: str = "", project: str = "", role: str = "reference",

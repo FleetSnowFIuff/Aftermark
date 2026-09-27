@@ -20,6 +20,8 @@ v0.1.1 delivers atomic tagged imports, source-title defaults, archived project f
 
 v0.1.2 adds scoped correction retrieval, visible match locations, stale-evidence markers, and a real local MCP connection check.
 
+v0.1.3 adds PDF page and subtitle segment navigation, revision-bearing citations, and scoped segment reads shared by CLI and MCP.
+
 Remaining work stays focused:
 
 - Test the documented setup with a small number of real hosts; publish the actual compatibility results.
@@ -33,7 +35,7 @@ Exit when the main workflow is dependable for the initial users. Do not add embe
 
 Choose only the improvements that address observed friction:
 
-- Better article extraction and source anchors; clearer PDF page and transcript timestamp navigation.
+- Better article extraction and source capture, guided by actual import failures.
 - A convenience capture entry point or installer for the most-used hosts.
 - Optional semantic retrieval only if a measured benchmark shows useful gains over the existing keyword baseline.
 

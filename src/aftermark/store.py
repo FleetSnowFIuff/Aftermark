@@ -11,6 +11,7 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 
+from .sources import locations, read_source
 from .models import Bundle, CorrectionInput, ItemInput, UsageInput, new_id, now
 
 
@@ -146,7 +147,20 @@ class Store:
                 record["is_current_revision"] = record["item_revision"] == item["revision"]
             file = db.execute("SELECT filename,media_type,length(data) AS size FROM attachments WHERE item_id=?", (item_id,)).fetchone()
             item["attachment"] = dict(file) if file else None
+            item["locations"] = locations(item)
             return item
+
+    def read(self, item_id: str, project: str = "", offset: int = 0, limit: int = 12000,
+             anchor: str = "", expected_revision: int | None = None) -> dict:
+        item = self.get(item_id)
+        if item["archived"]:
+            raise ValueError("This bookmark is archived.")
+        if item["project"] and item["project"] != project:
+            raise ValueError("This bookmark belongs to another project.")
+        item.update(read_source(item, offset, limit, anchor, expected_revision))
+        item["corrections"] = [c for c in item["corrections"] if c["project"] in {"", project}]
+        item["usage"] = [u for u in item["usage"] if u["project"] == project][:10]
+        return item
 
     def update(self, item_id: str, value: ItemInput) -> dict:
         with self.connection() as db:
@@ -252,6 +266,7 @@ class Store:
                     candidate.update(excerpt=content[start:start + 1200], excerpt_start=start, matched_terms=matches,
                                      source_status="text_available" if content else "link_only")
                     candidate["previous_usage"] = [dict(r) for r in db.execute("SELECT outcome,reason,evidence,item_revision,created_at FROM usage WHERE item_id=? AND project=? ORDER BY created_at DESC,id LIMIT 3", (item["id"], project))]
+                    candidate["excerpt_locations"] = [m for m in locations(item) if m["start"] < start + 1200 and m["end"] > start][:10]
                     for record in candidate["previous_usage"]:
                         record["is_current_revision"] = record["item_revision"] == item["revision"]
                     candidates.append(candidate)

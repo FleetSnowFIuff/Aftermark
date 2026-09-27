@@ -10,7 +10,7 @@ Web / PDF / text → ingest → ItemInput
 
 `models.py` defines boundary contracts. `store.py` owns persistence, retrieval, project filters, revisions and backup transactions. `ingest.py` extracts source text without inventing summaries. `web.py`, `cli.py` and `mcp_server.py` are thin entry points sharing those functions.
 
-The local app and each MCP process open short SQLite connections. WAL supports concurrent readers; transactions keep updates and the search index consistent. Schema version 1 is recorded with `PRAGMA user_version`; no migration framework is needed before the second schema exists.
+The local app and each MCP process open short SQLite connections. WAL supports concurrent readers; transactions keep updates and the search index consistent. Schema version 2 is recorded with `PRAGMA user_version`; the v1-to-v2 upgrade builds the correction index in one transaction.
 
 ## Retrieval
 
@@ -39,3 +39,7 @@ Schema 2 adds a derived FTS5 correction index. Existing correction records are i
 Usage records keep their recorded revision. APIs calculate `is_current_revision` when reading, so updates never silently turn old evidence into current evidence. A revision mismatch requests reassessment; it does not invalidate the historical observation.
 
 `doctor` and the browser diagnostic endpoint share one function that launches the configured local MCP stdio subprocess. It lists tools and calls recall, without writing bookmarks or usage. This validates the transport, not any third-party host's behavior.
+
+## v0.1.3 source locations
+
+`sources.py` derives locations from saved PDF page markers and SRT/VTT timing lines. No new persistent index or schema is needed. Locations and citations carry the bookmark revision; callers can supply `expected_revision` to reject stale references. `Store.read` shares scope checks and bounded source reads between CLI and MCP. Offsets count Unicode code points and are relative to the selected segment, or the full source when no anchor is supplied. The browser uses the same code-point convention for slicing. Original uploads remain unchanged.

@@ -12,7 +12,7 @@
 
 ## 启动
 
-需要 **Python 3.11+**。[下载 v0.1.2 源码](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.2.zip) 并解压，或克隆本仓库。
+需要 **Python 3.11+**。[下载 v0.1.3 源码](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.3.zip) 并解压，或克隆本仓库。
 
 | 平台 | 首次安装 | 打开应用 |
 | --- | --- | --- |
@@ -42,7 +42,19 @@
 | 记录 | 仅参考、已采用、已验证、未采用 | 采用和验证必须附证据；系统不替你验证证据 |
 | 迁移 | JSON 导入/导出，包括原文件和历史 | 已存在 ID 跳过，不隐式覆盖 |
 
-## v0.1.2 新增
+## v0.1.3 新增
+
+检索后可以直接查看对应的 PDF 页或字幕时间段，并复制包含收藏 ID 和版本号的引用。详情页提供来源位置选择。
+
+`recall` 返回 `excerpt_locations`。将其中的位置 ID 和收藏版本传给 MCP 的 `read_bookmark`（`anchor`、`expected_revision`），或通过命令行读取：
+
+```sh
+aftermark read BOOKMARK_ID --project my-project --anchor page-2 --revision 1
+```
+
+使用检索实际返回的 ID 和版本；资料修改后，旧版读取请求会明确报错。读取遵守项目范围，`--offset` 相对于所选片段，`--limit` 限制返回长度。页码和 SRT/VTT 时间点来自已保存文本，不代表理解视频画面；无时间信息的文本不会生成虚构定位。数据库仍为 schema 2。
+
+## 同时包含 v0.1.2 的改进
 
 任务检索现在也会搜索当前项目适用的纠正，并显示命中的是标题、意图、正文、标签还是纠正。仍然采用关键词检索，不声称理解语义。
 
