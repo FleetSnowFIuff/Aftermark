@@ -25,3 +25,16 @@ def test_real_stdio_roundtrip(tmp_path):
             read = await client.call_tool("read_bookmark", {"bookmark_id": item_id, "project": "game"})
             assert read.structured_content["usage"][0]["item_revision"] == 2
     anyio.run(workflow)
+
+
+def test_doctor_uses_real_stdio_without_changing_collection(store):
+    from aftermark.diagnostics import check_connection
+    from aftermark.models import ItemInput
+    store.create(ItemInput(title="My note", content="Keep my own words"))
+    before = store.export()
+    report = anyio.run(check_connection, store)
+    assert report["ok"] is True
+    assert report["transport"] == "stdio"
+    assert report["data_dir"] == str(store.home.resolve())
+    assert "recall" in report["tools"]
+    assert store.export() == before

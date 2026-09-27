@@ -98,3 +98,58 @@ def test_rules_require_intent_and_urls_are_http():
         ItemInput(title="Rule", content="Source", role="rule")
     with pytest.raises(ValidationError):
         ItemInput(title="Link", source_url="javascript:alert(1)")
+
+
+def test_correction_only_matches_respect_both_scopes(store):
+    personal = bookmark(store)
+    private = bookmark(store, project="alpha")
+    store.correct(personal["id"], CorrectionInput(text="检查触屏延迟 touchscreen latency", project="alpha"))
+    store.correct(private["id"], CorrectionInput(text="photogrammetry"))
+    found = store.recall("检查触屏延迟", "alpha")["candidates"]
+    assert [x["id"] for x in found] == [personal["id"]]
+    assert found[0]["match_locations"] == ["corrections"]
+    assert "触屏" in found[0]["matched_terms"]
+    for scope in ("", "beta"):
+        assert store.recall("touchscreen latency", scope)["candidates"] == []
+        assert store.recall("photogrammetry", scope)["candidates"] == []
+    assert store.recall("photogrammetry", "alpha")["candidates"][0]["id"] == private["id"]
+    store.archive(personal["id"], True)
+    assert store.recall("touchscreen", "alpha")["candidates"] == []
+
+
+def test_corrections_survive_backup_and_v1_database_upgrade(store, tmp_path):
+    item = bookmark(store)
+    store.correct(item["id"], CorrectionInput(text="Check accessibility", project="game"))
+    exported = store.export()
+    with store.connection() as db:
+        db.execute("DROP TABLE correction_search")
+        db.execute("PRAGMA user_version=1")
+    upgraded = Store(store.home)
+    assert upgraded.export() == exported
+    assert upgraded.recall("accessibility", "game")["candidates"][0]["id"] == item["id"]
+    restored = Store(tmp_path / "restored-v2")
+    restored.import_bundle(Bundle.model_validate(exported))
+    assert restored.recall("accessibility", "game")["candidates"][0]["id"] == item["id"]
+    assert restored.recall("accessibility", "other")["candidates"] == []
+    assert Store(store.home).export() == exported
+
+
+def test_old_usage_is_explicitly_marked_after_a_correction(store):
+    item = bookmark(store)
+    store.record(item["id"], UsageInput(task="Jump", outcome="verified", reason="Tested", evidence="test_jump passed"))
+    assert store.get(item["id"])["usage"][0]["is_current_revision"] is True
+    store.correct(item["id"], CorrectionInput(text="Prototype only"))
+    assert store.get(item["id"])["usage"][0]["is_current_revision"] is False
+    assert not store.history()[0]["is_current_revision"]
+    recalled = store.recall("jump")["candidates"][0]
+    assert recalled["previous_usage"][0]["is_current_revision"] is False
+    assert recalled["previous_usage"][0]["outcome"] == "verified"
+
+
+def test_source_and_correction_matches_are_combined_without_duplicate_results(store):
+    source = bookmark(store, title="Accessibility", content="Keyboard navigation", intent="", role="reference")
+    both = bookmark(store, title="Accessibility", content="Keyboard navigation", intent="", role="reference")
+    store.correct(both["id"], CorrectionInput(text="Accessibility in menus"))
+    result = store.recall("accessibility")["candidates"]
+    assert [x["id"] for x in result] == [both["id"], source["id"]]
+    assert set(result[0]["match_locations"]) == {"title", "corrections"}

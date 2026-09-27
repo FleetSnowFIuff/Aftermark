@@ -1,8 +1,8 @@
-# v0.1.1 validation
+# v0.1.2 validation
 
 Validated locally on Windows with Python 3.13.9:
 
-- 19 automated tests pass: project isolation, Chinese/English retrieval, corrections, revision-bound evidence, archiving, original-file backups and restore, source parsing, the HTTP workflow, and a real MCP stdio client/server process.
+- 25 automated tests pass: project isolation, Chinese/English retrieval, corrections, revision-bound evidence, archiving, original-file backups and restore, source parsing, the HTTP workflow, and a real MCP stdio client/server process.
 - Browser checks: import examples, retrieve a Chinese task, save a scoped correction and see it immediately, switch languages, save a new note, and inspect generated MCP configuration.
 - Fresh Windows source installation through `setup.cmd` succeeds in a separate folder with a new virtual environment.
 - The source distribution and wheel build successfully. Static UI, example data, and the standalone introduction are included.
@@ -20,3 +20,5 @@ The [CI template](ci-example.yml) covers Windows and Ubuntu with Python 3.11 and
 Use disposable test libraries with `--data-dir`; never treat generated sample usage as evidence of a real project improvement.
 
 For v0.1.1, HTTP regression tests additionally cover atomic tagged imports, source-title defaults, tag validation and archived project filters. Browser automation was unavailable in this session because its execution environment failed to start; the changed form flow still needs a fresh browser check. macOS/Linux setup scripts have not been run on those operating systems.
+
+v0.1.2 checks additionally cover correction-only matches in English/Chinese, both levels of project scope, archival exclusion, old-database migration without changing exported data, correction indexing after backup restore, stale usage evidence, combined result ranking, and read-only CLI/API MCP diagnostics. Windows installer verification was performed for v0.1.1; browser and specific host compatibility remain pending.

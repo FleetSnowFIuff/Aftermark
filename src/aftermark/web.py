@@ -139,6 +139,11 @@ def create_app(home: Path | str | None = None) -> FastAPI:
         bundle = Bundle.model_validate_json((ROOT / "data/examples.json").read_text(encoding="utf-8"))
         return store.import_bundle(bundle)
 
+    @app.post("/api/diagnostics")
+    async def diagnostics():
+        from .diagnostics import check_connection
+        return await check_connection(store)
+
     @app.get("/api/integration")
     def integration():
         return config(store.home)

@@ -73,3 +73,13 @@ def test_archived_only_projects_remain_selectable(tmp_path):
         assert client.get("/api/projects").json() == ["retired"]
         assert client.get("/api/items").json() == []
         assert client.get("/api/items?archived=true&project=retired").json()[0]["id"] == saved["id"]
+
+
+def test_connection_check_endpoint_is_read_only(tmp_path):
+    with TestClient(create_app(tmp_path)) as client:
+        client.post("/api/examples")
+        before = client.get("/api/export").json()
+        report = client.post("/api/diagnostics")
+        assert report.status_code == 200
+        assert report.json()["ok"] is True
+        assert client.get("/api/export").json() == before

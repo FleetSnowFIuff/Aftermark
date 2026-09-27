@@ -31,3 +31,11 @@ Original uploaded files are stored in SQLite blobs and downloaded as attachments
 - [MCP stdio client transport](https://py.sdk.modelcontextprotocol.io/client/transports/)
 
 The project targets the installed and tested MCP SDK 2.x API (`MCPServer`); it does not contain a speculative v1 fallback.
+
+## v0.1.2 retrieval and diagnostics
+
+Schema 2 adds a derived FTS5 correction index. Existing correction records are indexed transactionally on first opening an older database. Source and correction results are scope-filtered independently, then combined using reciprocal rank fusion (constant 60, up to 100 distinct candidates per list). No raw BM25 scores are compared across indexes. Corrections remain attached to their original source; imported backups rebuild the derived index. The JSON interchange format remains version 1.
+
+Usage records keep their recorded revision. APIs calculate `is_current_revision` when reading, so updates never silently turn old evidence into current evidence. A revision mismatch requests reassessment; it does not invalidate the historical observation.
+
+`doctor` and the browser diagnostic endpoint share one function that launches the configured local MCP stdio subprocess. It lists tools and calls recall, without writing bookmarks or usage. This validates the transport, not any third-party host's behavior.

@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.1.2 — 2026-09-27
 
-- Point the introduction page’s install button directly to its setup section.
+- Search relevant corrections as well as source text, with both bookmark and correction project scopes enforced. Show where each result matched.
+- Mark usage records that refer to an older bookmark revision without rewriting the original outcome or evidence.
+- Add `aftermark doctor` and a bilingual connection-check button that start a real local MCP process and call recall without writing bookmarks or usage.
+- Upgrade schema v1 to v2 automatically by indexing existing corrections. JSON backup format remains version 1; old application versions cannot open schema v2.
+- Point the introduction page's install action directly to setup instructions.
 
 ## 0.1.1 — 2026-09-27
 

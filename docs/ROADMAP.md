@@ -18,6 +18,8 @@ Acceptance: start from a clean installation, save a source, find it in the right
 
 v0.1.1 delivers atomic tagged imports, source-title defaults, archived project filters, portable setup scripts and synchronized installation guidance.
 
+v0.1.2 adds scoped correction retrieval, visible match locations, stale-evidence markers, and a real local MCP connection check.
+
 Remaining work stays focused:
 
 - Test the documented setup with a small number of real hosts; publish the actual compatibility results.
