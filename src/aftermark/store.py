@@ -39,6 +39,10 @@ def terms(text: str) -> list[str]:
     return list(dict.fromkeys(word for word in result if word not in STOPWORDS))
 
 
+class RevisionConflict(ValueError):
+    """The source changed between reading and reporting its use."""
+
+
 class Store:
     def __init__(self, home: Path | str | None = None):
         self.home = Path(home) if home is not None else default_home()
@@ -209,11 +213,15 @@ class Store:
 
     def record(self, item_id: str, value: UsageInput) -> dict:
         with self.connection() as db:
+            # Keep the revision check and insert in the same write transaction.
+            db.execute("BEGIN IMMEDIATE")
             item = self._get(db, item_id)
             if item["project"] and item["project"] != value.project:
                 raise ValueError("This bookmark is limited to a different project.")
+            if item["revision"] != value.expected_revision:
+                raise RevisionConflict(f"Bookmark changed: expected revision {value.expected_revision}, current revision {item['revision']}. Read the current source and corrections, reassess, then record using that revision.")
             record = {"id": new_id(), "item_id": item_id, "item_revision": item["revision"],
-                      **value.model_dump(), "created_at": now()}
+                      **value.model_dump(exclude={"expected_revision"}), "created_at": now()}
             db.execute("INSERT INTO usage (id,item_id,item_revision,task,project,outcome,reason,evidence,created_at) VALUES (:id,:item_id,:item_revision,:task,:project,:outcome,:reason,:evidence,:created_at)", record)
         return record
 

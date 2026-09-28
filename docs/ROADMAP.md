@@ -4,7 +4,7 @@ The current local preview contains the complete save → retrieve → read → r
 
 Next, in order:
 
-1. Use a real saved method on a real code change. Compare the decision and evidence with the source, not just whether tools were called.
+1. Repeat the guided project-defect acceptance on a user-selected research or game method. The revision workflow is now verified in Codex CLI; measure actual decision quality next, without treating guided tests as automatic recall.
 2. Fix observed retrieval misses and capture friction; keep a small English/Chinese regression set.
 3. Verify another host and improve the most common setup failures.
 

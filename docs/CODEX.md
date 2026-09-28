@@ -22,7 +22,7 @@ CLI and desktop clients on the same host share MCP configuration according to th
 1. Save a note with distinctive task keywords and an exact project name, such as `my-game`.
 2. Add a relevant correction. In **Connect an agent**, enter the exact project name and generate instructions (or run `aftermark --data-dir .local/library config --project my-game`). Copy them into that project's `AGENTS.md`. This repository uses `Aftermark`; empty scope means personal knowledge only.
 3. Start a fresh Codex task. Ask it to find related knowledge, read the source at the returned revision, and inspect the current implementation before making a change or decision.
-4. Inspect actual tool events and the artifact. Ask it to record what it actually did: a suggestion is `referenced`, `applied` needs a change, and `verified` needs check results.
+4. Inspect actual tool events and the artifact. Ask it to record what it actually did, passing the revision it read as `expected_revision`. A conflict requires rereading and reassessing, not merely changing the number: a suggestion is `referenced`, `applied` needs a change, and `verified` needs check results.
 
 Approvals still apply. In our non-interactive test, default `codex exec` refused an MCP approval even though the process exited with code 0. Rerunning with its normal `--approve-for-me` review flow allowed the requested calls. Do not disable sandboxing to force a pass. See the [official non-interactive guide](https://learn.chatgpt.com/docs/non-interactive-mode) and installed CLI help.
 
@@ -51,3 +51,21 @@ The continuing desktop conversation exposed all five Aftermark tools. Direct `re
 These were calls from this desktop conversation, not a separate CLI process. The latest user message was just a continuation, but this conversation already contained an explicit acceptance task and project instructions. It is not an unguided or blinded recall benchmark. The precise action that refreshed the tool catalog was not established, so reopening the app remains troubleshooting advice rather than a proven cause.
 
 The earlier correction saying desktop acceptance was pending describes the prior state. It remains in the test source as historical context; fresh tool evidence establishes the current result. Synthetic test notes have not been silently rewritten or presented as real research.
+
+## Revision-bound usage — 0.3.0, September 28
+
+A real 0.2.0 reproduction read revision 1, changed the source, then incorrectly recorded that read against revision 2. The 0.3 change requires the actual read revision in new usage requests, checks it and inserts within one write transaction. Reload the MCP connection after updating; the new argument is required.
+
+Two real Codex CLI runs used an isolated library containing the maintainer-authored reproduction record, plus explicit acceptance corrections and a scope distractor. The prompt asked for the workflow; the bookmarked source supplied the initial code/test targets. This evaluates real project code, but does not establish research benefit or autonomous recall.
+
+| Check | Observed result |
+| --- | --- |
+| First run | MCP conflict/recovery/readback passed; shell initialization failed and a per-command escalation was rejected. Recorded referenced, not verified. |
+| First-run finding | Generic SDK errors concealed the conflict reason. A narrow ToolError conversion now exposes revision numbers and a reread instruction. |
+| Second run | User explicitly approved per-command escalation through normal review. No global sandbox bypass. |
+| Actual code checks | Codex inspected Store.record, ran store/content/correction + HTTP checks (3 passed), then the CLI check in the new correction (1 passed). Both runs emitted non-fatal pytest cache permission warnings. |
+| Stale write | Read v2, added the requested correction to make v3, then writing v2 was refused with expected/current versions and recovery guidance. No new history appeared. |
+| Recovery | Recalled and read v3, reassessed and recorded verified with the actual checks; a separate read returned the same usage ID at v3. |
+| Isolation | Another project returned no candidates and could not read the source by ID. |
+
+[Machine-readable evidence](evidence/codex-0.3.0.json) includes source hashes, tool-event summaries and persisted record IDs. Raw logs stay local. The first record remains referenced at v2; the second is verified at v3. The current desktop catalog predates the new argument: this is CLI evidence, not a claim that the new desktop contract was tested.

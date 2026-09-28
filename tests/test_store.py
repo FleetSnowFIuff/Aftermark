@@ -44,7 +44,7 @@ def test_recall_does_not_create_a_usage_claim(store):
 
 def test_usage_keeps_original_revision_after_correction_and_edit(store):
     item = bookmark(store)
-    store.record(item["id"], UsageInput(task="Improve jumping", outcome="verified", reason="Added buffering", evidence="controller.test: 6 checks passed"))
+    store.record(item["id"], UsageInput(expected_revision=1, task="Improve jumping", outcome="verified", reason="Added buffering", evidence="controller.test: 6 checks passed"))
     store.correct(item["id"], CorrectionInput(text="Prototype only"))
     updated = ItemInput(**{k: item[k] for k in ItemInput.model_fields})
     updated.title = "Controller latency"
@@ -61,10 +61,10 @@ def test_usage_keeps_original_revision_after_correction_and_edit(store):
 def test_outcomes_require_evidence_and_matching_project(store):
     for outcome in ["applied", "verified"]:
         with pytest.raises(ValidationError):
-            UsageInput(task="Improve", outcome=outcome, reason="It worked")
+            UsageInput(expected_revision=1, task="Improve", outcome=outcome, reason="It worked")
     item = bookmark(store, project="alpha")
     with pytest.raises(ValueError, match="different project"):
-        store.record(item["id"], UsageInput(task="Improve", outcome="referenced", reason="Read it", project="beta"))
+        store.record(item["id"], UsageInput(expected_revision=1, task="Improve", outcome="referenced", reason="Read it", project="beta"))
     with pytest.raises(ValueError, match="match"):
         store.correct(item["id"], CorrectionInput(text="Wrong project", project="beta"))
 
@@ -72,7 +72,7 @@ def test_outcomes_require_evidence_and_matching_project(store):
 def test_backup_roundtrip_preserves_original_and_history(store, tmp_path):
     item = store.create(ItemInput(title="Transcript", kind="video", content="00:01.000 --> 00:02.000\nJump buffer"), ("lesson.vtt", "text/plain", b"WEBVTT\nsource bytes"))
     store.correct(item["id"], CorrectionInput(text="Keep controls", project="game"))
-    store.record(item["id"], UsageInput(task="Jump", outcome="referenced", reason="Read source", project="game"))
+    store.record(item["id"], UsageInput(expected_revision=2, task="Jump", outcome="referenced", reason="Read source", project="game"))
     exported = store.export()
     restored = Store(tmp_path / "restored")
     assert restored.import_bundle(Bundle.model_validate(exported)) == {"imported": 1, "skipped": 0}
@@ -136,7 +136,7 @@ def test_corrections_survive_backup_and_v1_database_upgrade(store, tmp_path):
 
 def test_old_usage_is_explicitly_marked_after_a_correction(store):
     item = bookmark(store)
-    store.record(item["id"], UsageInput(task="Jump", outcome="verified", reason="Tested", evidence="test_jump passed"))
+    store.record(item["id"], UsageInput(expected_revision=1, task="Jump", outcome="verified", reason="Tested", evidence="test_jump passed"))
     assert store.get(item["id"])["usage"][0]["is_current_revision"] is True
     store.correct(item["id"], CorrectionInput(text="Prototype only"))
     assert store.get(item["id"])["usage"][0]["is_current_revision"] is False

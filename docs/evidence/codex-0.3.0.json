@@ -1,0 +1,133 @@
+{
+  "release": "0.3.0",
+  "date": "2026-09-28",
+  "host": "Windows; Python 3.13.9; codex-cli 0.158.0-alpha.2.1",
+  "mode": "Real Codex CLI with existing ChatGPT login and normal automatic approval. Explicitly prompted acceptance; isolated library.",
+  "source_type": "Maintainer-authored record of an actually reproduced Aftermark 0.2.0 defect; not external research or a user-trusted collection. Corrections and distractor are acceptance fixtures.",
+  "before": {
+    "version": "0.2.0",
+    "read_revision": 1,
+    "recorded_revision": 2,
+    "bug_reproduced": true
+  },
+  "first_run": {
+    "result": "MCP flow completed; code checks blocked by sandbox initialization and rejected escalation.",
+    "outcome": "referenced",
+    "usage_id": "117db2d7-bf32-4ba9-8c0f-e9279a513508",
+    "revision": 2,
+    "finding": "Revision conflicts were hidden by the SDK generic error; fixed with a narrow ToolError conversion."
+  },
+  "second_run": {
+    "result": "Specified acceptance passed after explicit user approval for per-command escalation.",
+    "source_id": "56aa151a-7f69-4ad1-bbdf-9ed3a2b51641",
+    "read_revision": 2,
+    "corrected_revision": 3,
+    "stale_write_status": "failed",
+    "stale_write_response": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Error executing tool record_usage: Bookmark changed: expected revision 2, current revision 3. Read the current source and corrections, reassess, then record using that revision."
+        }
+      ],
+      "structured_content": null
+    },
+    "usage_id": "50a461c8-7665-4b74-b9ac-6cfb68cba407",
+    "outcome": "verified",
+    "persisted_revision": 3,
+    "checks": [
+      "Store/content and correction changes + HTTP: 3 passed",
+      "CLI missing/stale/current revision: 1 passed",
+      "No new record after stale attempt",
+      "Same verified record independently read back",
+      "Cross-project recall empty and direct read refused"
+    ],
+    "warnings": [
+      "Both CLI-run pytest commands reported cache-write permission warnings; assertions passed."
+    ],
+    "mcp_events": [
+      {
+        "tool": "recall",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": null
+      },
+      {
+        "tool": "read_bookmark",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": 2
+      },
+      {
+        "tool": "add_correction",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": null
+      },
+      {
+        "tool": "record_usage",
+        "status": "failed",
+        "project": "Aftermark",
+        "expected_revision": 2
+      },
+      {
+        "tool": "recall",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": null
+      },
+      {
+        "tool": "read_bookmark",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": 3
+      },
+      {
+        "tool": "record_usage",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": 3
+      },
+      {
+        "tool": "read_bookmark",
+        "status": "failed",
+        "project": "Aftermark-isolation-probe",
+        "expected_revision": 3
+      },
+      {
+        "tool": "recall",
+        "status": "completed",
+        "project": "Aftermark-isolation-probe",
+        "expected_revision": null
+      },
+      {
+        "tool": "read_bookmark",
+        "status": "completed",
+        "project": "Aftermark",
+        "expected_revision": 3
+      }
+    ]
+  },
+  "automated_checks": {
+    "suite": "43 passed",
+    "command": "python -m pytest -q -p no:cacheprovider --basetemp .local/tests-030-errors"
+  },
+  "limitations": [
+    "Not a blinded or unguided recall benchmark",
+    "No measured productivity or research-quality improvement",
+    "Current desktop MCP catalog predates the new required recording argument; 0.3 desktop writeback not tested",
+    "Browser interaction, other hosts and macOS/Linux execution remain unverified"
+  ],
+  "source_sha256": {
+    "src\\aftermark\\store.py": "4877d148abd5e68c0b3215ff2830d27b86ce0ae7c07528bee85dd57685835edd",
+    "src\\aftermark\\mcp_server.py": "883920412f36419d0f9425288832184ebc7268b2dca789acc180c53dd7612fe9",
+    "src\\aftermark\\models.py": "7ed2b4e3396f78e88a94b26e7f893c38f33a9bf3d4b21fe098aafbc9fe5ec24d",
+    "src\\aftermark\\web.py": "b9474b586091ecb1d7dd78b6fe9941f9e6022582b1802517e929bd543a3a7e99",
+    "src\\aftermark\\cli.py": "4857f6e74c3981d63f5d2fad676c8f813787f7efd59955f7795959547d280df9",
+    "tests\\test_usage.py": "f9806e142fda9cb580d08fe1998e17d419856b515f9d2883c40e2c745aa056d1"
+  },
+  "local_log_sha256": {
+    "first-events.jsonl": "67122440afed4f0f9e262e4baaadb26b8d3626bd3225094f4d23f4b71d68ea16",
+    "events.jsonl": "ff1f00464be0769e3651f99f1af422e23f3e80ac0b91958dd88557a0dd175f10"
+  }
+}

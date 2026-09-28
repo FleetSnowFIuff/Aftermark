@@ -81,7 +81,7 @@ class Correction(CorrectionInput):
     created_at: str
 
 
-class UsageInput(InputModel):
+class UsageFields(InputModel):
     task: str = Field(min_length=1, max_length=4000)
     project: str = Field(default="", max_length=160)
     outcome: Outcome
@@ -95,7 +95,11 @@ class UsageInput(InputModel):
         return self
 
 
-class Usage(UsageInput):
+class UsageInput(UsageFields):
+    expected_revision: int = Field(ge=1)
+
+
+class Usage(UsageFields):
     id: str
     item_id: str
     item_revision: int = Field(ge=1)

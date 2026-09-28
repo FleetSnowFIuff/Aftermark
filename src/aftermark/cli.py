@@ -64,6 +64,7 @@ def parser() -> argparse.ArgumentParser:
     correction.add_argument("--project", default="")
     record = commands.add_parser("record")
     record.add_argument("id")
+    record.add_argument("--revision", type=int, required=True, help="Revision actually read; reread and reassess if the source changed")
     record.add_argument("--task", required=True)
     record.add_argument("--outcome", required=True, choices=["referenced", "applied", "verified", "skipped"])
     record.add_argument("--reason", required=True)
@@ -144,7 +145,7 @@ def run(args):
     elif args.command == "correct":
         result = store.correct(args.id, CorrectionInput(text=args.text, project=args.project))
     elif args.command == "record":
-        result = store.record(args.id, UsageInput(task=args.task, outcome=args.outcome, reason=args.reason, evidence=args.evidence, project=args.project))
+        result = store.record(args.id, UsageInput(expected_revision=args.revision, task=args.task, outcome=args.outcome, reason=args.reason, evidence=args.evidence, project=args.project))
     elif args.command == "archive":
         result = store.archive(args.id, not args.restore)
     elif args.command == "export":

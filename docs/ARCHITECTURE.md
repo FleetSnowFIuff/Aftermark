@@ -43,3 +43,7 @@ Usage records keep their recorded revision. APIs calculate `is_current_revision`
 ## v0.1.3 source locations
 
 `sources.py` derives locations from saved PDF page markers and SRT/VTT timing lines. No new persistent index or schema is needed. Locations and citations carry the bookmark revision; callers can supply `expected_revision` to reject stale references. `Store.read` shares scope checks and bounded source reads between CLI and MCP. Offsets count Unicode code points and are relative to the selected segment, or the full source when no anchor is supplied. The browser uses the same code-point convention for slicing. Original uploads remain unchanged.
+
+## Recording the version actually read
+
+New requests require `UsageInput.expected_revision`; stored `Usage` remains unchanged for backup compatibility. Store.record acquires a write transaction before scope/revision checks and history insertion. A conflict writes nothing. HTTP returns 409 with `revision_conflict`; CLI exits 1; MCP translates only this known conflict into a [ToolError](https://py.sdk.modelcontextprotocol.io/servers/handling-errors/) so the host sees recovery guidance. Unexpected errors keep the SDK behavior.

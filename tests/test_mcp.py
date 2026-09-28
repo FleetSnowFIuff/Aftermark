@@ -24,7 +24,7 @@ def test_real_stdio_roundtrip(tmp_path):
             assert read.structured_content["content"] == "Keep "
             assert read.structured_content["next_offset"] == 5
             assert read.structured_content["usage"] == []
-            await client.call_tool("record_usage", {"bookmark_id": item_id, "task": "Improve jump", "project": "game", "outcome": "applied", "reason": "Fits controller", "evidence": "controller.py: input buffer added"})
+            await client.call_tool("record_usage", {"expected_revision": 2, "bookmark_id": item_id, "task": "Improve jump", "project": "game", "outcome": "applied", "reason": "Fits controller", "evidence": "controller.py: input buffer added"})
             read = await client.call_tool("read_bookmark", {"bookmark_id": item_id, "project": "game"})
             assert read.structured_content["usage"][0]["item_revision"] == 2
     anyio.run(workflow)

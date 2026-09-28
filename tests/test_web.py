@@ -17,7 +17,7 @@ def test_complete_browser_api_workflow(tmp_path):
         assert client.post(f"/api/items/{item_id}/corrections", json={"text": "Prototype only", "project": "demo"}).status_code == 201
         result = client.post("/api/recall", json={"task": "jump", "project": "demo"}).json()
         assert result["candidates"][0]["corrections"][0]["text"] == "Prototype only"
-        no_evidence = {"task": "Jump", "outcome": "verified", "project": "demo", "reason": "Works"}
+        no_evidence = {"expected_revision": 2, "task": "Jump", "outcome": "verified", "project": "demo", "reason": "Works"}
         assert client.post(f"/api/items/{item_id}/usage", json=no_evidence).status_code == 422
         assert client.post(f"/api/items/{item_id}/usage", json={**no_evidence, "evidence": "tests/test_jump.py passed"}).status_code == 201
         assert client.get("/api/history").json()[0]["item_revision"] == 2

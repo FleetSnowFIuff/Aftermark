@@ -1,11 +1,12 @@
 from typing import Any
 
 from mcp.server import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
 from mcp.types import ToolAnnotations
 
 from . import __version__
 from .models import CorrectionInput, ItemInput, UsageInput
-from .store import Store
+from .store import RevisionConflict, Store
 
 
 def create_server(store: Store) -> MCPServer:
@@ -39,9 +40,12 @@ def create_server(store: Store) -> MCPServer:
                                       source_url=source_url, kind=kind, tags=tags or []))
 
     @server.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=False, open_world_hint=False))
-    def record_usage(bookmark_id: str, task: str, outcome: str, reason: str, project: str = "", evidence: str = "") -> dict[str, Any]:
-        """Record an actual referenced/applied/verified/skipped decision. Applied needs a change reference; verified needs check results. This is a reported record, not an independent verification by Aftermark."""
-        return store.record(bookmark_id, UsageInput(task=task, outcome=outcome, reason=reason, project=project, evidence=evidence))
+    def record_usage(bookmark_id: str, task: str, outcome: str, reason: str, expected_revision: int, project: str = "", evidence: str = "") -> dict[str, Any]:
+        """Record an actual referenced/applied/verified/skipped decision. Pass expected_revision from the source you read. On a revision conflict, reread and reassess before recording; never just retry with a newer number. Applied needs a change reference; verified needs check results. This is a reported record, not an independent verification by Aftermark."""
+        try:
+            return store.record(bookmark_id, UsageInput(task=task, outcome=outcome, reason=reason, expected_revision=expected_revision, project=project, evidence=evidence))
+        except RevisionConflict as error:
+            raise ToolError(str(error)) from error
 
     @server.tool(annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=False, open_world_hint=False))
     def add_correction(bookmark_id: str, text: str, project: str = "") -> dict[str, Any]:
@@ -53,6 +57,6 @@ def create_server(store: Store) -> MCPServer:
         return (f"Work on this task: {task}\nProject name: {project or '(personal/global collection only)'}\n"
                 "Call recall first. Read relevant bookmarks and corrections. Check the current code and constraints. "
                 "Explain which sources fit, which do not, and which methods are already implemented. "
-                "Never invent a source, an implementation, a test result, or a user preference. Record only actual usage with evidence.")
+                "Never invent a source, an implementation, a test result, or a user preference. Record only actual usage with evidence and expected_revision from the source read; reread and reassess after a conflict.")
 
     return server

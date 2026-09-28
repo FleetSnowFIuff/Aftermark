@@ -25,8 +25,10 @@ Use values returned by recall. A changed revision is rejected. `--offset` counts
 Usage records:
 
 ```sh
-aftermark --data-dir .local/library record BOOKMARK_ID --task "Adjust layout" --project my-site --outcome applied --reason "Fits this page" --evidence "src/page.css: spacing change"
+aftermark --data-dir .local/library record BOOKMARK_ID --revision 1 --task "Adjust layout" --project my-site --outcome applied --reason "Fits this page" --evidence "src/page.css: spacing change"
 ```
+
+Use the revision actually read, not a guessed latest version. MCP `record_usage` and HTTP usage requests require `expected_revision`; the web form submits the revision shown when it was opened. Missing revisions are rejected. A changed source returns HTTP 409 (MCP tool error / CLI exit 1); no record is written. Reread the source and corrections, reassess the work, then submit the revision you read. Do not just substitute the newer number. Existing JSON backups do not gain this request-only field.
 
 Use `referenced` for reading or advice, `applied` for a real change, `verified` for actual checks with results, or `skipped` with a reason. Aftermark stores the report; it does not execute those checks.
 

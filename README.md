@@ -32,7 +32,7 @@ No account or extra model API key is needed for Aftermark. Installation and fetc
 | Papers | Text PDFs, retained original files and page citations |
 | Videos | Links and supplied SRT/VTT subtitles with timestamp locations |
 
-Search finds task keywords in sources and applicable corrections. Read the matching page or subtitle segment, then decide with your agent whether it fits the project. Usage records distinguish referenced, applied, verified and skipped; changed sources leave older evidence clearly marked.
+Search finds task keywords in sources and applicable corrections. Read the matching page or subtitle segment, then decide with your agent whether it fits the project. Usage records distinguish referenced, applied, verified and skipped; changed sources leave older evidence clearly marked. A usage record must include the revision actually read. If the source changes during the task, reread its content and corrections and reassess before recording.
 
 ## Connect and use
 
@@ -46,11 +46,13 @@ aftermark --data-dir .local/library connect codex --apply
 
 The first command generates project-specific instructions. The next previews Codex registration; `--apply` registers it through Codex's CLI and preserves conflicting entries. Other MCP hosts use the generated JSON. Tools are `recall`, `read_bookmark`, `save_bookmark`, `add_correction` and `record_usage`.
 
+**Upgrading to 0.3:** new usage requests require `expected_revision` (CLI: `record --revision N`). Existing history and backups are unchanged. Restart running Aftermark services, reload your agent’s MCP connection and regenerate project instructions. Older clients that omit the revision receive an error instead of silently attributing work to a new source.
+
 [Codex setup and real-client evidence](docs/CODEX.md) · [CLI and source reading](docs/USAGE.md)
 
 ## Does it work?
 
-Real Codex CLI and a desktop conversation completed retrieval, revision-aware reading and usage recording. A fresh task with project instructions read a new correction, but did not automatically record usage. These were synthetic acceptance tasks, not measured engineering gains. Other hosts and reliable unguided recall remain unverified. [Exact validation scope](docs/VALIDATION.md).
+In 0.3, a real Codex CLI run read an observed project defect from Aftermark, inspected the fix, ran four relevant checks, recovered from a stale-revision rejection and read back its persisted `verified` record. The first blocked run remains recorded as `referenced`. This was a guided acceptance task in a separate library, not a productivity or unguided-recall benchmark. Earlier desktop calls validated the basic workflow; the new desktop writeback contract and other hosts remain unverified. [Exact validation scope](docs/VALIDATION.md).
 
 ## Your data
 

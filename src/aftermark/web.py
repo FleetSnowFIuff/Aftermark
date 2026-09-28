@@ -13,7 +13,7 @@ from . import __version__
 from .ingest import MAX_FILE_BYTES, fetch_page, parse_file
 from .integration import config
 from .models import Bundle, CorrectionInput, InputModel, ItemInput, SearchInput, UsageInput
-from .store import Store
+from .store import RevisionConflict, Store
 
 ROOT = Path(__file__).parent
 
@@ -52,6 +52,10 @@ def create_app(home: Path | str | None = None) -> FastAPI:
     @app.exception_handler(KeyError)
     async def missing(_request, error):
         return JSONResponse({"detail": str(error.args[0])}, status_code=404)
+
+    @app.exception_handler(RevisionConflict)
+    async def revision_conflict(_request, error):
+        return JSONResponse({"detail": str(error), "code": "revision_conflict"}, status_code=409)
 
     @app.exception_handler(ValueError)
     async def invalid(_request, error):
