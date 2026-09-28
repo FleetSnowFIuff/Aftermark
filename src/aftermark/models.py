@@ -22,6 +22,10 @@ class InputModel(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
 
+class IntegrationInput(InputModel):
+    project: str | None = Field(default=None, max_length=160)
+
+
 class ItemInput(InputModel):
     title: str = Field(min_length=1, max_length=240)
     kind: Kind = "note"

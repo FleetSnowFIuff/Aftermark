@@ -1,102 +1,63 @@
 # Aftermark
 
-[GitHub](https://github.com/FleetSnowFIuff/Aftermark) · [MIT](LICENSE) · [Changelog](CHANGELOG.md)
-
 **收藏好方法，让你的 Agent 下次用上。**
 
-[English](README.md) · [版本计划](docs/ROADMAP.md) · [架构说明](docs/ARCHITECTURE.md) · [验证范围](docs/VALIDATION.md)
+[English](README.md) · [下载当前版本](https://github.com/FleetSnowFIuff/Aftermark/releases/latest) · [MIT](LICENSE)
 
-给 Coding Agent 的本地收藏夹：保存来源、你为什么收藏、适用项目，以及用错之后的纠正。浏览器、命令行和支持 MCP 的 Agent 共用一份本地知识库。
+给 Coding Agent 的本地收藏夹：保留来源、收藏意图、适用项目，以及实际使用后的纠正。浏览器、CLI 和支持 MCP 的 Agent 共用一份收藏库。
 
-第一版实现完整的「收藏 → 检索 → 阅读 → 记录使用 → 纠正 → 再检索」链路。它不训练模型、不把检索命中当成适用性结论，也不假装读懂了只有链接的视频。
+## 三步开始
 
-## 启动
-
-需要 **Python 3.11+**。[下载 v0.1.5 源码](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.5.zip) 并解压，或克隆本仓库。
+需要 **Python 3.11+**。[下载源码 ZIP](https://github.com/FleetSnowFIuff/Aftermark/releases/latest/download/Aftermark-source.zip)，解压后运行：
 
 | 平台 | 首次安装 | 打开应用 |
 | --- | --- | --- |
 | Windows | 双击 `setup.cmd` | 双击 `start-aftermark.cmd` |
 | macOS / Linux | `sh setup.sh` | `sh start-aftermark.sh` |
 
-启动脚本统一使用工程内的 `.local/library`。连接 Agent 时，请从界面复制这个收藏库的配置。命令行访问同一份数据时，Windows 使用 `.venv\Scripts\aftermark --data-dir .local/library ...`，macOS/Linux 使用 `.venv/bin/aftermark --data-dir .local/library ...`。直接运行不带 `--data-dir` 的 `aftermark` 会访问下文说明的系统默认库，两者不会自动合并。
+1. 打开 **http://127.0.0.1:43821**，保存一条经验，或导入三个示例。
+2. 在「连接 Agent」复制 Codex 接入命令，或其他客户端的 MCP 配置。
+3. 选择准确的项目名，生成项目指引，放入 Agent 的项目规则，再用一个真实任务检查它如何使用收藏。
 
-也可以手动创建虚拟环境，然后在其中执行 `python -m pip install -e .`。项目尚未发布到 PyPI，请使用源码安装。
+项目留空只使用个人通用收藏。生成指引不会修改客户端文件。是否主动检索仍取决于客户端与工作指引。
 
-访问 **http://127.0.0.1:43821**。macOS/Linux 将 `.venv\Scripts\` 换为 `.venv/bin/`。
+Aftermark 无需注册或额外模型 API Key。首次安装、抓取网页需要联网；安装后笔记、PDF 和本地关键词检索可离线使用。尚未发布到 PyPI，请使用源码或发布页安装包。
 
-首次安装需要联网；安装后，笔记、PDF 文本提取、检索和本地界面可离线使用。无需注册、下载模型或提供额外模型 API Key。抓取网页时才访问你提供的来源地址。
+## 可以收藏什么
 
-先点击「导入三个示例」，再在「带入任务」中输入「改善跳跃输入容错」。可以查看原文、补充纠正、记录实际使用结果。示例为项目自写内容，不冒充外部论文或视频。
+| 来源 | 已支持 |
+| --- | --- |
+| 自己的经验 | 笔记、Markdown、TXT、收藏意图和项目纠正 |
+| 网页 | 普通网页正文，或明确标注为仅链接的收藏 |
+| 论文 | 文本 PDF、原文件保留、页码定位与引用 |
+| 视频 | 链接、用户提供的 SRT/VTT 字幕和时间段定位 |
 
-## 首版能力
+检索会查找正文及当前项目适用的纠正。你和 Agent 阅读来源，判断是否适用、是否已经实现，再记录「仅参考、已采用、已验证、未采用」。资料更新后，旧使用记录不会冒充当前版本的验证结果。
 
-| 入口 | 已实现 | 边界 |
-| --- | --- | --- |
-| 笔记 | 手写内容、Markdown、TXT | 保留原文，不自动生成摘要 |
-| 网页 | 普通 HTML/文本抓取，或仅收藏链接 | 不渲染 JavaScript，不登录或绕过付费墙 |
-| PDF | 文本提取、页码标记、保存原文件 | 无 OCR，扫描件会明确提示 |
-| 视频 | 收藏链接，导入 SRT/VTT 或手动粘贴字幕 | 不自动下载、转录或理解画面 |
-| 检索 | 英文词与中文双字关键词匹配 | 不是语义搜索；适用性由你和 Agent 判断 |
-| 记忆 | 意图、个人/项目范围、纠正、版本号 | 项目名精确匹配，不擅自修改用户要求 |
-| 记录 | 仅参考、已采用、已验证、未采用 | 采用和验证必须附证据；系统不替你验证证据 |
-| 迁移 | JSON 导入/导出，包括原文件和历史 | 已存在 ID 跳过，不隐式覆盖 |
-
-## v0.1.5：桌面对话验收已通过
-
-真实 Codex CLI 已完成「检索 → 阅读来源和纠正 → 记录仅参考」。另一个新任务在项目常驻指引下，无需重复提醒工具名，也读到了最新纠正；但没有自动写使用记录。**9 月 28 日，当前桌面对话也完成了直接检索、版本读取、项目隔离、使用记录写入与读回**。这是合成资料的接入验收，不代表已经证明工程收益。完整结果见 [接入与验收记录](docs/CODEX.md)。
+## 接入与使用
 
 激活虚拟环境后执行：
 
 ```sh
+aftermark --data-dir .local/library config --project my-game
 aftermark --data-dir .local/library connect codex
 aftermark --data-dir .local/library connect codex --apply
 ```
 
-第一条预览，第二条通过 Codex 官方 CLI 注册。冲突配置不会被覆盖；界面「连接 Agent」也提供包含实际路径的可复制命令。MCP 工具补充只读/写入标记，调用仍遵循客户端审批。
+第一条生成带项目名的指引；第二条预览 Codex 注册；第三条通过 Codex CLI 注册，冲突配置不会被覆盖。其他支持 MCP 的客户端可使用生成的 JSON。
 
-## v0.1.3 的来源定位
+[Codex 接入与实际调用记录](docs/CODEX.md) · [CLI 与来源读取](docs/USAGE.md)
 
-检索后可以直接查看对应的 PDF 页或字幕时间段，并复制包含收藏 ID 和版本号的引用。详情页提供来源位置选择。
+## 是否真的可用
 
-`recall` 返回 `excerpt_locations`。将其中的位置 ID 和收藏版本传给 MCP 的 `read_bookmark`（`anchor`、`expected_revision`），或通过命令行读取：
+真实 Codex CLI 和桌面对话已完成检索、按版本读取、使用记录写入与读回。带项目指引的新任务读到了追加纠正，但没有自动写使用记录。这些是合成资料的接入验收，尚未证明真实工程收益；其他客户端及日常主动调用的稳定性仍待验证。[完整验证范围](docs/VALIDATION.md)。
 
-```sh
-aftermark read BOOKMARK_ID --project my-project --anchor page-2 --revision 1
-```
+## 数据与边界
 
-使用检索实际返回的 ID 和版本；资料修改后，旧版读取请求会明确报错。读取遵守项目范围，`--offset` 相对于所选片段，`--limit` 限制返回长度。页码和 SRT/VTT 时间点来自已保存文本，不代表理解视频画面；无时间信息的文本不会生成虚构定位。数据库仍为 schema 2。
+启动脚本使用工程内 `.local/library`；CLI 访问同一份数据时加 `--data-dir .local/library`。不指定时，Windows 默认使用 `%LOCALAPPDATA%\Aftermark`，其他平台见英文说明。也可通过 `AFTERMARK_HOME` 指定。多个客户端须指向同一个库。
 
-## 同时包含 v0.1.2 的改进
+JSON 备份包含原文件和历史，导入时跳过已有 ID。升级前建议备份；本版仍使用 schema 2、JSON 备份格式 1。本地服务面向个人使用，不应公开暴露。
 
-任务检索现在也会搜索当前项目适用的纠正，并显示命中的是标题、意图、正文、标签还是纠正。仍然采用关键词检索，不声称理解语义。
+目前是关键词检索，不是语义搜索；不提供 OCR、自动转录、视频画面理解或云同步。网页提取不执行 JavaScript 或绕过登录。采用和验证要有证据，但系统不替你验证证据；参考资料不会自动变成更高优先级的指令。
 
-使用记录会明确标注是否对应旧版收藏。此前的验证结果保留为历史证据，不会自动算作对修改后内容的验证。
-
-在「连接 Agent」点击「检查本地连接」，或激活虚拟环境后执行 `aftermark --data-dir .local/library doctor`。检查会实际启动 MCP 进程并调用检索，不新增收藏或使用记录；不代表特定客户端已经兼容或会主动调用。
-
-旧数据库首次打开时升级到 schema 2，JSON 备份格式保持版本 1。如需保留回退能力，请升级前导出备份；v0.1.1 无法直接打开升级后的数据库。
-
-## 连接 Agent
-
-在「连接 Agent」复制配置与工作指引，或执行：
-
-```sh
-aftermark config
-```
-
-生成配置使用当前 Python 的绝对路径与当前数据目录。手动添加到支持 MCP 的客户端，不会覆盖已有配置。也可以让 Agent 使用 CLI。
-
-建议指引已经包含：任务前检索、先阅读来源与纠正、检查项目是否适用或已实现、真实记录结果。**提供 MCP 工具不等于每个 Agent 都会自动调用**；客户端实际表现需要逐一验证。
-
-工具为 `recall`、`read_bookmark`、`save_bookmark`、`add_correction`、`record_usage`，另提供显式调用的 `use_my_knowledge` 提示模板。
-
-## 数据与维护
-
-默认数据位置为 Windows 的 `%LOCALAPPDATA%\Aftermark`；其他平台见英文 README。可用 `aftermark --data-dir 路径 ...` 指定，也可设置 `AFTERMARK_HOME`。多个客户端须使用同一目录。
-
-数据库、上传内容和个人设置不应提交 GitHub；项目已忽略数据库及本地开发数据。归档可恢复。修改收藏或添加纠正会提升版本，旧记录仍保留原版本，不会自动变成新版本的验证结果。
-
-## 后续只做短线打磨
-
-v0.1 完成总体框架；v0.1.x 处理真实试用问题；v0.2 重点打磨导入与客户端接入。首轮不扩展到云协作、自动科研、多模型调度或大规模视频基础设施。具体验收标准见 [版本计划](docs/ROADMAP.md)。
+[架构](docs/ARCHITECTURE.md) · [短期计划](docs/ROADMAP.md) · [更新记录](CHANGELOG.md)

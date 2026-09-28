@@ -1,32 +1,30 @@
-# v0.1.5 validation
+# Validation — current local preview
 
-Validated locally on Windows with Python 3.13.9:
+Windows, Python 3.13.9. 37 automated tests pass.
 
-- 35 automated tests pass: project isolation, Chinese/English retrieval, corrections, revision-bound evidence, archiving, original-file backups and restore, source parsing, the HTTP workflow, and a real MCP stdio client/server process.
-- Browser checks from v0.1.0: import examples, retrieve a Chinese task, save a scoped correction and see it immediately, switch languages, save a new note, and inspect generated MCP configuration. These do not verify subsequent UI changes.
-- Fresh Windows source installation through `setup.cmd` succeeds in a separate folder with a new virtual environment.
-- The source distribution and wheel build successfully. Static UI, example data, and the standalone introduction are included.
+| Area | Evidence |
+| --- | --- |
+| Core library | Project isolation, English/Chinese keyword retrieval, scoped corrections, archival exclusion, original-file backups and restore |
+| Revisions | Stale usage flags, revision-aware reads and migration from schema 1 to 2 without rewriting exported data |
+| Sources | Real two-page PDF extraction, retained original bytes, SRT/VTT timing, Unicode offsets and bounded reads |
+| Interfaces | HTTP workflows, real MCP stdio calls and read/write annotations, CLI/API diagnostics |
+| Onboarding | Codex preview/apply and conflict handling; project-specific instructions via CLI/API, Chinese/quoted names, personal scope and unchanged MCP connection |
+| Codex clients | Actual CLI and desktop recall/read/record/readback, with limitations documented in [CODEX.md](CODEX.md) |
 
-The [CI template](ci-example.yml) covers Windows and Ubuntu with Python 3.11 and 3.13. It is not enabled: publishing GitHub workflows requires an additional workflow permission. To enable it, place the template at `.github/workflows/test.yml` after granting that permission. Remote jobs have not run. Real Codex CLI and current-desktop acceptance are documented in [CODEX.md](CODEX.md); other hosts are pending. Protocol tests alone do not prove proactive tool use or host compatibility.
+The new project-guidance UI has API and JavaScript syntax checks; interactive browser acceptance remains pending. Earlier manual browser checks do not validate subsequent UI changes. macOS/Linux launcher execution and other agent hosts remain unverified.
 
-## Short manual acceptance
+The [CI template](ci-example.yml) is not enabled because the current publishing credential lacks workflow scope. No remote CI success is claimed.
 
-1. Install, run `aftermark serve`, import examples.
-2. Recall `jump input buffering` under a project name of your choice.
-3. Add a correction for that project and recall again. A different project must not receive the correction.
-4. Connect a real MCP host using `aftermark config` and add the suggested instructions.
-5. Ask the host to inspect a relevant source and the current code, then report an actual decision with evidence.
+## What the client checks establish
 
-Use disposable test libraries with `--data-dir`; never treat generated sample usage as evidence of a real project improvement.
+A directly prompted Codex task completed retrieval, source reading and usage recording. A fresh task with project rules read a newly added correction, but did not record usage automatically. The desktop conversation later completed direct tool calls and read back its persisted record. These were labeled synthetic acceptance notes, not measured improvements to real project code. The initial non-interactive approval failure remains in the evidence.
 
-For v0.1.1, HTTP regression tests additionally cover atomic tagged imports, source-title defaults, tag validation and archived project filters. Browser automation was unavailable in this session because its execution environment failed to start; the changed form flow still needs a fresh browser check. macOS/Linux setup scripts have not been run on those operating systems.
+## Manual task acceptance
 
-v0.1.2 checks additionally cover correction-only matches in English/Chinese, both levels of project scope, archival exclusion, old-database migration without changing exported data, correction indexing after backup restore, stale usage evidence, combined result ranking, and read-only CLI/API MCP diagnostics. Windows installer verification was performed for v0.1.1; browser and specific host compatibility remain pending.
+1. Save a real source with intent and the exact project name.
+2. Generate instructions for that project, connect the agent and start a fresh task.
+3. Check the actual retrieved source, correction and revision; another project must not receive scoped content.
+4. Inspect the code change or decision and the submitted evidence. Record only what happened.
+5. Export/import into a disposable library and confirm the same information survives.
 
-v0.1.3 checks cover real two-page PDF extraction and original bytes, page-specific reads, SRT/VTT timings, CRLF input, Unicode offsets, bounded pagination, missing anchors, stale revisions, project scope and archived sources. A real MCP subprocess reads a selected PDF page and rejects its stale revision after a correction. Browser execution could not start in this environment; the new location selector and copy-citation action still need a browser check. The schema remains 2.
-
-The v0.1.3 wheel was installed in a separate virtual environment. Its CLI successfully read a scoped PDF page with a revision-bearing citation, and `doctor` passed through the installed package's real MCP subprocess.
-
-For v0.1.4, tests cover Codex registration preview, explicit apply, preserving existing or conflicting entries, missing CLI, and MCP tool read/write annotations. Real Codex runs exposed a default non-interactive approval failure. A normally reviewed run completed recall/read/record; a fresh task with project guidance read a new correction but did not record usage automatically. Desktop visibility and browser UI acceptance remain pending. See [client evidence](CODEX.md).
-
-On 2026-09-28, the current desktop conversation directly called recall/read/record/readback and checked a non-matching project. All calls succeeded; the usage was persisted at source revision 3 as referenced. This is synthetic acceptance, not a code-improvement benchmark. v0.1.5 corrects setup advice for desktop versions without Restart. The exact action that refreshed the tool catalog was not established.
+Keep test libraries separate from real project evidence. The schema remains 2 and JSON backups remain format 1.

@@ -21,7 +21,8 @@ def parser() -> argparse.ArgumentParser:
     serve.add_argument("--port", type=int, default=43821)
     serve.add_argument("--open", action="store_true", help="Open the browser automatically")
     commands.add_parser("mcp", help="Run the MCP server over stdio")
-    commands.add_parser("config", help="Print MCP configuration and suggested host instructions")
+    configuration = commands.add_parser("config", help="Print MCP configuration and suggested host instructions")
+    configuration.add_argument("--project", help="Exact project name for the generated instructions; an empty string selects personal knowledge")
     connect = commands.add_parser("connect", help="Preview or explicitly register a host connection")
     connect.add_argument("host", choices=["codex"])
     connect.add_argument("--apply", action="store_true", help="Register Aftermark through codex mcp add; preserve conflicting entries")
@@ -107,7 +108,7 @@ def run(args):
         create_server(store).run()
         return
     if args.command == "config":
-        result = config(store.home)
+        result = config(store.home, args.project)
     elif args.command == "connect":
         from .codex import connect
         result = connect(store.home, args.apply)

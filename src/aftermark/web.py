@@ -145,8 +145,8 @@ def create_app(home: Path | str | None = None) -> FastAPI:
         return await check_connection(store)
 
     @app.get("/api/integration")
-    def integration():
-        return config(store.home)
+    def integration(project: str | None = None):
+        return config(store.home, project)
 
     @app.get("/")
     def index():

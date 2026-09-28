@@ -1,6 +1,6 @@
 # Connect and verify Codex
 
-v0.1.4 was exercised by the real Codex CLI on Windows. On 2026-09-28, the current desktop conversation also completed direct MCP retrieval, revision-aware reading, usage recording and readback. v0.1.5 updates setup guidance and publishes this evidence.
+The local preview has been exercised by the real Codex CLI and a desktop conversation on Windows. Retrieval, revision-aware reading, usage recording and readback have direct evidence below.
 
 ## Setup
 
@@ -20,7 +20,7 @@ CLI and desktop clients on the same host share MCP configuration according to th
 ## Task acceptance
 
 1. Save a note with distinctive task keywords and an exact project name, such as `my-game`.
-2. Add a relevant correction. Copy the instructions from **Connect an agent** into that project's `AGENTS.md`, with its exact project name. This repository uses `Aftermark`.
+2. Add a relevant correction. In **Connect an agent**, enter the exact project name and generate instructions (or run `aftermark --data-dir .local/library config --project my-game`). Copy them into that project's `AGENTS.md`. This repository uses `Aftermark`; empty scope means personal knowledge only.
 3. Start a fresh Codex task. Ask it to find related knowledge, read the source at the returned revision, and inspect the current implementation before making a change or decision.
 4. Inspect actual tool events and the artifact. Ask it to record what it actually did: a suggestion is `referenced`, `applied` needs a change, and `verified` needs check results.
 

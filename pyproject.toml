@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aftermark"
-version = "0.1.5"
+version = "0.2.0"
 description = "Save what works. Bring your sources and intent into your coding agent's next task."
 readme = "README.md"
 requires-python = ">=3.11"

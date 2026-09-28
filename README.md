@@ -1,120 +1,66 @@
 # Aftermark
 
-[GitHub](https://github.com/FleetSnowFIuff/Aftermark) · [MIT](LICENSE) · [Changelog](CHANGELOG.md)
-
 **Save what works. Teach your agent when to use it.**
 
-[简体中文](README.zh-CN.md) · [Version plan](docs/ROADMAP.md) · [Architecture](docs/ARCHITECTURE.md) · [Validation](docs/VALIDATION.md)
+[简体中文](README.zh-CN.md) · [Download current release](https://github.com/FleetSnowFIuff/Aftermark/releases/latest) · [MIT](LICENSE)
 
-Aftermark is a local bookmark library for coding agents. Keep a source, why you saved it, which project it applies to, and corrections from real work. Use the same collection from a browser, the CLI, or an MCP-compatible agent.
+A local bookmark library for coding agents. Keep a source, why you saved it, the project it applies to, and corrections from real work. Your browser, CLI and MCP-compatible agent share one collection.
 
-**v0.1 is a working local foundation.** It does not train a model, understand an unread video, or guarantee that an agent will recall the right thing. It retrieves keyword candidates; your chosen agent checks applicability against the project.
+## Start in three steps
 
-## Start locally
-
-Requires **Python 3.11+**. [Download v0.1.5](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.5.zip) and extract it, or clone this repository.
+Requires **Python 3.11+**. [Download the source ZIP](https://github.com/FleetSnowFIuff/Aftermark/releases/latest/download/Aftermark-source.zip), extract it, then:
 
 | Platform | Install once | Open the app |
 | --- | --- | --- |
 | Windows | Double-click `setup.cmd` | Double-click `start-aftermark.cmd` |
 | macOS / Linux | `sh setup.sh` | `sh start-aftermark.sh` |
 
-These scripts use `.local/library` inside the project for your data. In **Connect an agent**, copy configuration for that exact library. For CLI access to it, use `.venv/Scripts/aftermark --data-dir .local/library ...` on Windows or `.venv/bin/aftermark --data-dir .local/library ...` on macOS/Linux. Running plain `aftermark` without `--data-dir` uses the separate system-default library described below.
+1. Open **http://127.0.0.1:43821**, save a note or import the three examples.
+2. In **Connect an agent**, copy the Codex setup command or your host's MCP configuration.
+3. Choose the exact project name, generate its instructions and add them to your agent's project rules. Try a relevant task and inspect what it actually used.
 
-Manual installation: create a virtual environment, then run `python -m pip install -e .` in it. Aftermark is not yet published to PyPI; `pip install aftermark` is not the documented installation route.
+Empty project means personal/global bookmarks only. Generating instructions changes no host files. Automatic recall depends on your host and instructions.
 
-Open **http://127.0.0.1:43821**. No account, model download, or extra model API key is required. Installation and fetching external pages require internet access; notes, search, PDF parsing, and the local UI work offline after installation.
+No account or extra model API key is needed for Aftermark. Installation and fetching webpages need internet; local notes, PDFs and keyword search work offline afterward. The project is not published to PyPI: use the source ZIP or the wheel on the release page.
 
-Try **Import three examples**, then **Use in a task** with `jump input buffering` or `跳跃输入容错`. Inspect the source, add a project-specific correction, and search again.
+## What you can keep
 
-## What works in v0.1
+| Source | Supported |
+| --- | --- |
+| Your own knowledge | Notes, Markdown, TXT, intent and scoped corrections |
+| Web | Ordinary page text, or explicitly link-only bookmarks |
+| Papers | Text PDFs, retained original files and page citations |
+| Videos | Links and supplied SRT/VTT subtitles with timestamp locations |
 
-- Notes, Markdown/TXT, ordinary web-page text, text-based PDFs with page markers, and video links with manually supplied SRT/VTT transcripts.
-- An optional intent, one project scope, and a clear distinction between reference material, a method to consider, and an explicit user requirement.
-- English tokens and CJK bigram retrieval. No embeddings, model downloads, or background services beyond the local app.
-- Source reading, scoped corrections, archive/restore, and honest usage records: referenced, applied, verified, or skipped.
-- Original uploaded files retained locally. JSON backup/import includes sources, attachments, corrections, and usage; existing IDs are skipped instead of overwritten.
-- Chinese/English local UI, CLI, and a standard MCP stdio server sharing one SQLite database.
+Search finds task keywords in sources and applicable corrections. Read the matching page or subtitle segment, then decide with your agent whether it fits the project. Usage records distinguish referenced, applied, verified and skipped; changed sources leave older evidence clearly marked.
 
-## New in v0.1.5: desktop acceptance completed
+## Connect and use
 
-The real Codex CLI retrieved a saved source, read its correction and recorded an honest `referenced` outcome. A fresh task with project instructions also retrieved the latest correction without a tool reminder, but did **not** automatically record usage. The current desktop conversation also passed direct retrieval, source reading, project isolation and persisted usage readback on September 28. These are synthetic acceptance checks, not measured engineering gains. See [results and setup](docs/CODEX.md).
+In an activated environment:
 
 ```sh
+aftermark --data-dir .local/library config --project my-game
 aftermark --data-dir .local/library connect codex
 aftermark --data-dir .local/library connect codex --apply
 ```
 
-Preview first, then register through Codex's own CLI. Conflicting entries are preserved. The app also provides a copyable setup command. MCP tools declare their read/write behavior; client approvals still apply.
+The first command generates project-specific instructions. The next previews Codex registration; `--apply` registers it through Codex's CLI and preserves conflicting entries. Other MCP hosts use the generated JSON. Tools are `recall`, `read_bookmark`, `save_bookmark`, `add_correction` and `record_usage`.
 
-## Source locations from v0.1.3
+[Codex setup and real-client evidence](docs/CODEX.md) · [CLI and source reading](docs/USAGE.md)
 
-Open the exact PDF page or saved subtitle segment behind a result. The source viewer has a location selector and a copy-citation action; citations include the bookmark ID and revision.
+## Does it work?
 
-`recall` returns `excerpt_locations`. Pass a returned location ID and revision to MCP `read_bookmark` (`anchor`, `expected_revision`), or use the CLI:
+Real Codex CLI and a desktop conversation completed retrieval, revision-aware reading and usage recording. A fresh task with project instructions read a new correction, but did not automatically record usage. These were synthetic acceptance tasks, not measured engineering gains. Other hosts and reliable unguided recall remain unverified. [Exact validation scope](docs/VALIDATION.md).
 
-```sh
-aftermark read BOOKMARK_ID --project my-project --anchor page-2 --revision 1
-```
+## Your data
 
-Use the actual ID and revision returned by recall. Reads preserve project scope and reject a changed revision. `--offset` is relative to the selected segment; `--limit` bounds the returned text. PDF pages and SRT/VTT timestamps come from saved text, not video analysis. Untimed text remains readable without invented locations. Database schema stays at 2.
+The launchers use `.local/library` inside the project. Use `--data-dir .local/library` from this directory to access it from the CLI. Without that flag, the default is `%LOCALAPPDATA%\Aftermark` on Windows, `~/Library/Application Support/Aftermark` on macOS, or `$XDG_DATA_HOME/aftermark` on Linux. `AFTERMARK_HOME` can also select a directory. All clients must use the same library.
 
-## Also included from v0.1.2
+JSON export/import includes original files and history. Existing IDs are skipped on import. Back up before upgrades; schema 2 and JSON backup format 1 remain unchanged in this release. The app is for personal, local use and binds to loopback.
 
-Task retrieval also searches corrections that apply to the current project, and reports whether the match came from the title, intent, source, tags, or corrections. Source and correction rankings are combined; this remains keyword retrieval, not semantic understanding.
+## Limits
 
-Usage history marks older bookmark revisions explicitly. A previous verification is preserved as historical evidence, not treated as verification of changed content.
-
-In **Connect an agent**, run **Check local connection**, or use `aftermark --data-dir .local/library doctor` in your activated environment. This starts a real MCP subprocess and tests tool discovery and recall without writing bookmarks or usage. It does not certify a particular agent host.
-
-Existing databases upgrade to schema 2 on opening; export a backup before upgrading if you need a rollback. v0.1.1 cannot open schema 2. JSON backups keep format version 1.
-
-## Connect your agent
-
-Open **Connect an agent**, or run:
-
-```sh
-aftermark config
-```
-
-Copy the generated MCP configuration and suggested instructions into your chosen host. The generated command uses your actual Python executable and absolute data directory. It does not silently modify any client configuration.
-
-MCP tools:
-
-| Tool | Purpose |
-| --- | --- |
-| `recall` | Find candidates for a task and exact project name; include relevant corrections and previous decisions |
-| `read_bookmark` | Read source text in pages without marking it as used |
-| `save_bookmark` | Save text or a link at the user's request |
-| `add_correction` | Remember an explicit correction and its project scope |
-| `record_usage` | Record the actual decision and evidence |
-
-The `use_my_knowledge` MCP prompt starts the workflow explicitly. Automatic tool use depends on your host and model. Standard protocol tests do not establish compatibility with every product; see [validation status](docs/VALIDATION.md) for the exact tested scope.
-
-## CLI examples
-
-```sh
-aftermark add --title "Keep our brand" --text "Borrow the hierarchy, not the color palette." --intent "Keep our existing brand colors." --role rule --project my-site
-aftermark add --title "A reference" --url https://example.com --fetch
-aftermark add --file paper.pdf --intent "Check assumptions before applying this method."
-aftermark recall "improve page layout" --project my-site
-aftermark show BOOKMARK_ID
-aftermark correct BOOKMARK_ID "For prototypes only." --project my-site
-aftermark record BOOKMARK_ID --task "Adjust layout" --project my-site --outcome applied --reason "Fits this page" --evidence "src/page.css: spacing change"
-aftermark export backup.json
-aftermark import backup.json
-```
-
-Use `aftermark --data-dir PATH ...` or `AFTERMARK_HOME` to choose a library. All clients must point to the same library. The default location is `%LOCALAPPDATA%\Aftermark` on Windows, `~/Library/Application Support/Aftermark` on macOS, or `$XDG_DATA_HOME/aftermark` (`~/.local/share/aftermark`) on Linux.
-
-## Boundaries
-
-- No automatic transcription, video-frame understanding, OCR, browser extension, cloud sync, multi-user hosting, or autonomous code editing in v0.1.
-- Web extraction does not execute JavaScript, log into sites, or bypass paywalls. A failed fetch remains an error; a link-only bookmark is explicitly labeled.
-- “Verified” means a user or agent submitted evidence. Aftermark does not execute the check or certify the result. Each record keeps the bookmark revision it refers to.
-- Project scopes are exact names, not automatically detected repositories. An empty task scope uses only personal bookmarks. Corrections do not override higher-priority user or host instructions.
-- The web server binds to loopback and rejects other origins. This is a personal local application; do not expose it as a public service.
-- Imports are trusted backups, not a public ingestion endpoint. Review imported sources and requirements before using them with an agent.
+Keyword retrieval, not semantic search. No OCR, automatic video transcription, frame understanding or cloud sync. Web extraction does not execute JavaScript or bypass login. Usage evidence is submitted by the user or agent; Aftermark does not independently verify it. Sources remain references and cannot override higher-priority instructions.
 
 ## Development
 
@@ -124,8 +70,6 @@ python -m pytest
 python -m build
 ```
 
-The project deliberately uses a small stack: Python, SQLite, FastAPI, the official MCP SDK, and plain browser JavaScript. Input validation lives at boundaries. Internal failures are not converted into empty success responses.
+Python, SQLite, FastAPI, the official MCP SDK and plain browser JavaScript. [Architecture](docs/ARCHITECTURE.md) · [Short roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md).
 
-## License
-
-MIT. Example notes are original project content. Imported sources keep their original rights and provenance.
+MIT. Example notes are original project content. Imported sources retain their original rights.
