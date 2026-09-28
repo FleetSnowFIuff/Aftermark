@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5 — 2026-09-28
+
+- Verify direct Aftermark MCP calls in the current Codex desktop conversation, including project isolation and persisted usage readback.
+- Correct setup guidance for desktop versions without a Restart button; preview and conflict states now give appropriate next steps.
+- Publish desktop evidence and synchronize bilingual setup and introduction pages. Synthetic acceptance remains separate from claims of engineering gains.
+
 ## 0.1.4 — 2026-09-27
 
 - Add explicit `connect codex` preview/apply commands, preserve conflicting registrations and provide a copyable command in the bilingual UI.

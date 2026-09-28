@@ -1,4 +1,4 @@
-# v0.1.4 validation
+# v0.1.5 validation
 
 Validated locally on Windows with Python 3.13.9:
 
@@ -7,7 +7,7 @@ Validated locally on Windows with Python 3.13.9:
 - Fresh Windows source installation through `setup.cmd` succeeds in a separate folder with a new virtual environment.
 - The source distribution and wheel build successfully. Static UI, example data, and the standalone introduction are included.
 
-The [CI template](ci-example.yml) covers Windows and Ubuntu with Python 3.11 and 3.13. It is not enabled: publishing GitHub workflows requires an additional workflow permission. To enable it, place the template at `.github/workflows/test.yml` after granting that permission. Remote jobs have not run. Real Codex CLI acceptance is documented in [CODEX.md](CODEX.md); desktop and other hosts are pending. Protocol tests alone do not prove proactive tool use or host compatibility.
+The [CI template](ci-example.yml) covers Windows and Ubuntu with Python 3.11 and 3.13. It is not enabled: publishing GitHub workflows requires an additional workflow permission. To enable it, place the template at `.github/workflows/test.yml` after granting that permission. Remote jobs have not run. Real Codex CLI and current-desktop acceptance are documented in [CODEX.md](CODEX.md); other hosts are pending. Protocol tests alone do not prove proactive tool use or host compatibility.
 
 ## Short manual acceptance
 
@@ -28,3 +28,5 @@ v0.1.3 checks cover real two-page PDF extraction and original bytes, page-specif
 The v0.1.3 wheel was installed in a separate virtual environment. Its CLI successfully read a scoped PDF page with a revision-bearing citation, and `doctor` passed through the installed package's real MCP subprocess.
 
 For v0.1.4, tests cover Codex registration preview, explicit apply, preserving existing or conflicting entries, missing CLI, and MCP tool read/write annotations. Real Codex runs exposed a default non-interactive approval failure. A normally reviewed run completed recall/read/record; a fresh task with project guidance read a new correction but did not record usage automatically. Desktop visibility and browser UI acceptance remain pending. See [client evidence](CODEX.md).
+
+On 2026-09-28, the current desktop conversation directly called recall/read/record/readback and checked a non-matching project. All calls succeeded; the usage was persisted at source revision 3 as referenced. This is synthetic acceptance, not a code-improvement benchmark. v0.1.5 corrects setup advice for desktop versions without Restart. The exact action that refreshed the tool catalog was not established.

@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-28",
+  "client": "current Codex desktop conversation",
+  "test_type": "synthetic acceptance; continuing an explicit test with project instructions",
+  "bookmark_id": "f8164592-a58d-414a-a7f3-ffa63e6f12c6",
+  "revision": 3,
+  "correction_count": 2,
+  "checks": {
+    "recall": true,
+    "revision_read": true,
+    "other_project_empty": true,
+    "usage_written": true,
+    "usage_read_back": true
+  },
+  "usage": {
+    "id": "2b8c9fa8-d2ab-4d37-b6fc-97f8f387ccbd",
+    "item_id": "f8164592-a58d-414a-a7f3-ffa63e6f12c6",
+    "item_revision": 3,
+    "task": "当前 Codex 桌面对话的 Aftermark 接入验收与发布状态核对",
+    "project": "Aftermark",
+    "outcome": "referenced",
+    "reason": "已通过当前桌面对话直接检索并读取 v3 来源及两条纠正，按其中要求把桌面调用证据与 CLI 自检分开报告。这是合成资料的接入验收，不是工程效果评估。",
+    "evidence": "本轮 mcp__aftermark__recall(project=Aftermark) 返回目标收藏；read_bookmark(expected_revision=3) 成功返回来源、两条纠正和 v2 旧使用记录；recall(project=Aftermark-desktop-isolation) 返回空候选。验收标记 AM-CODEX-014。",
+    "created_at": "2026-09-28T00:15:27.045672+00:00"
+  },
+  "limitations": [
+    "Not an unguided recall benchmark",
+    "No measured engineering gains",
+    "Exact desktop refresh action not established"
+  ]
+}

@@ -78,6 +78,6 @@
       ]
     }
   ],
-  "desktop_current_thread": "pending: server not yet visible in desktop settings",
+  "desktop_current_thread": "September 27: pending, server visible without Restart. September 28: direct desktop flow passed; see codex-desktop-0.1.5.json.",
   "no_reminder_run": "Project AGENTS.md present; latest task did not name MCP or tools. Recalled and read revision 3; did NOT record usage."
 }

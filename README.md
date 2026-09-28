@@ -12,7 +12,7 @@ Aftermark is a local bookmark library for coding agents. Keep a source, why you 
 
 ## Start locally
 
-Requires **Python 3.11+**. [Download v0.1.4](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.4.zip) and extract it, or clone this repository.
+Requires **Python 3.11+**. [Download v0.1.5](https://github.com/FleetSnowFIuff/Aftermark/archive/refs/tags/v0.1.5.zip) and extract it, or clone this repository.
 
 | Platform | Install once | Open the app |
 | --- | --- | --- |
@@ -36,9 +36,9 @@ Try **Import three examples**, then **Use in a task** with `jump input buffering
 - Original uploaded files retained locally. JSON backup/import includes sources, attachments, corrections, and usage; existing IDs are skipped instead of overwritten.
 - Chinese/English local UI, CLI, and a standard MCP stdio server sharing one SQLite database.
 
-## New in v0.1.4: a real Codex check
+## New in v0.1.5: desktop acceptance completed
 
-The real Codex CLI retrieved a saved source, read its correction and recorded an honest `referenced` outcome. A fresh task with project instructions also retrieved the latest correction without a tool reminder, but did **not** automatically record usage. Desktop acceptance is pending. See [results and setup](docs/CODEX.md).
+The real Codex CLI retrieved a saved source, read its correction and recorded an honest `referenced` outcome. A fresh task with project instructions also retrieved the latest correction without a tool reminder, but did **not** automatically record usage. The current desktop conversation also passed direct retrieval, source reading, project isolation and persisted usage readback on September 28. These are synthetic acceptance checks, not measured engineering gains. See [results and setup](docs/CODEX.md).
 
 ```sh
 aftermark --data-dir .local/library connect codex

@@ -31,6 +31,11 @@ def connect(home: Path, apply: bool = False) -> dict:
         if added.returncode:
             raise ValueError("Codex could not register Aftermark. Run the previewed command to inspect the error.")
         status = "configured"
+    next_step = {
+        "not_configured": "Review this command, then run connect codex --apply to register the server.",
+        "conflict": "Review codex mcp get aftermark before changing the existing server; it was not overwritten.",
+        "configured": "Check for Aftermark tools in a fresh Codex turn. If absent, reopen Codex; some desktop versions have no Restart button. Do not uninstall to refresh. Verify recall, read_bookmark and a usage record; configuration alone is not a task test.",
+    }[status]
     return {"host": "codex", "status": status, "applied": apply and current is None,
             "command": command, "data_dir": str(home.resolve()),
-            "next_step": "Restart the MCP server in Codex settings and start a fresh turn. Verify recall, read_bookmark and an honest usage record. Configuration alone is not a connection or task test."}
+            "next_step": next_step}
