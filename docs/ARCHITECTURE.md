@@ -18,6 +18,8 @@ English words and CJK bigrams are indexed with SQLite FTS5. Title, intent and ta
 
 The library UI can browse all local projects; the task-oriented MCP reader enforces project scope. Recall does not create usage records. Corrections stay attached to the source and carry their own scope. Records preserve the source revision at the time of use.
 
+After ranking bookmarks, `task_excerpt` selects a bounded original-text window by distinct query-token coverage. It examines starts at a keyword and up to 160 characters before it, in order, using a sliding count. Context padding cannot displace an otherwise fitting keyword cluster; repeating a token does not add score. Ties keep the earliest candidate window. English word boundaries and CJK bigrams match the existing index. Unicode lowercase expansions map back to original offsets. No source text, FTS index, ranking score or revision is changed; `excerpt_matched_terms` describes only the selected passage.
+
 ## Boundaries
 
 No model client, provider key, orchestration loop or background job queue is required. The host agent supplies reasoning. Source text is never executed or inserted as HTML. The UI renders imported content as text. The local HTTP service binds to loopback, checks the Host header, and rejects cross-origin requests.

@@ -5,7 +5,7 @@ The current local preview contains the complete save → retrieve → read → r
 Next, in order:
 
 1. Repeat the guided project-defect acceptance on a user-selected research or game method. The revision workflow is now verified in Codex CLI; measure actual decision quality next, without treating guided tests as automatic recall.
-2. Fix observed retrieval misses and capture friction; keep a small English/Chinese regression set.
+2. Continue fixing observed retrieval misses. The first English/Chinese passage regression set now covers later keyword clusters, token boundaries, Unicode offsets and PDF/subtitle locations; evaluate real task phrasing next.
 3. Verify another host and improve the most common setup failures.
 
 Keep the scope short. No cloud accounts, multi-user collaboration, agent marketplace or automatic research pipeline in this cycle. Add semantic retrieval only if concrete evaluation shows a useful improvement.

@@ -23,7 +23,9 @@ In the app, paste a URL and keep **Import webpage text or PDF** checked. From an
 
 Without `--fetch` (or with the checkbox off), save a title and URL as a link only. MCP `save_bookmark` also does not fetch URLs. Video URLs must use that path; supply SRT/VTT separately for searchable timing. Login, JavaScript rendering, OCR and automatic transcription are unsupported. HTTP, unsupported-format, empty-text, unreadable-PDF and size errors do not save a bookmark. Servers must send a supported Content-Type; binary downloads labeled `application/octet-stream` are not guessed to be PDFs.
 
-Recall returns `excerpt_locations`. Pass an actual location ID and revision to MCP `read_bookmark` as `anchor` and `expected_revision`, or use:
+Recall returns an original-text excerpt of at most 1,200 Unicode code points. In long sources, keyword-anchored windows are compared by distinct query-term coverage; repeating one word adds no score. Whole English tokens and overlapping Chinese bigrams follow the existing index's token rules. `matched_terms` covers all matching fields, while `excerpt_matched_terms` identifies complete keywords inside the returned passage. A title/correction-only match can have an empty excerpt-term list and a passage from the beginning. This is lexical selection, not a semantic summary or an applicability score. Bookmark ranking is unchanged.
+
+`excerpt_start` counts original Unicode code points, even where lowercase conversion changes string length. Recall also returns `excerpt_locations`. Pass an actual location ID and revision to MCP `read_bookmark` as `anchor` and `expected_revision`, or use:
 
 ```sh
 aftermark --data-dir .local/library read BOOKMARK_ID --project my-site --anchor page-2 --revision 1

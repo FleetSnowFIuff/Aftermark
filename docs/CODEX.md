@@ -79,3 +79,13 @@ It also imported a URL serving a labeled synthetic PDF, recalled its content and
 The test used normal automatic approval. Its initial launcher failed before execution because an environment override used JSON instead of TOML; correcting that argument enabled the run. Loopback fixtures explicitly bypass the test environment's HTTP proxy. These facts and the source/record IDs are in [0.4 evidence](evidence/codex-0.4.0.json).
 
 Separately, this desktop conversation successfully supplied expected_revision=3 to record_usage and read back the saved referenced record on the synthetic acceptance note. That validates the new writeback contract here. This desktop session does not yet expose import_url: reload MCP after upgrading to use it. Desktop URL import and other hosts remain unverified. The prompt specified the workflow, so this is not an autonomous-recall benchmark.
+
+## Long-source excerpts — 0.5.0, September 29
+
+The first review prompt asked Codex to assess the excerpt implementation and run relevant checks. It did not name tool calls; the existing AGENTS.md supplied recall/read/record guidance. Codex retrieved a maintainer-authored defect-description note, read page 2 at revision 1, inspected code and passed 25 focused checks. It found an uncovered boundary: alpha at 2000 and beta at 3100 fit together, but fixed leading context selected only alpha.
+
+The first usage report mistakenly claimed the descriptive note itself proved the old excerpt started at 0. Codex subsequently appended a referenced record explicitly retracting that claim. The original record was not silently rewritten. The note is controlled acceptance material, not an external paper or the before/after fixture. [Client evidence](evidence/codex-0.5.0.json) preserves the distinction and record IDs.
+
+After adding keyword-start windows, a second Codex run checked the fix, including exact-fit and just-outside edges, and passed 28 focused tests. It recorded verified for those actual code checks and read back the same usage ID. That second readback was explicitly requested. The independent [0.4 versus 0.5 comparison](evidence/excerpts-0.5.0.json) uses identical controlled English/Chinese sources and actual installed versions.
+
+These runs demonstrate source consultation under project rules and a useful review finding. They do not establish reliable spontaneous recall, research benefit or a broad retrieval success rate. The current desktop session and other hosts were not used to validate the new excerpt algorithm.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 — 2026-09-29
+
+- Show a long-source passage covering more distinct task keywords instead of centering only the first match. Use whole English tokens and overlapping Chinese bigrams; repeated generic words add no score.
+- Keep excerpts as exact original-text slices, including Unicode lowercase expansions. Preserve PDF/subtitle locations and expose `excerpt_matched_terms` separately from matches in titles, intent and corrections.
+- Real Codex review found a boundary where fixed leading context displaced two keywords that fit in one window. Include keyword-start windows and add exact-boundary regression checks.
+- 63 automated tests passed; the second real Codex review passed 28 focused checks and recorded/read back actual results. Preserve its first inaccurate usage claim and the explicit retraction in the evidence summary.
+- Compare the released 0.4 wheel and new implementation on the same English/Chinese fixtures. No bookmark-ranking, database-schema, source-content or backup-format change.
+
 ## 0.4.0 — 2026-09-29
 
 - Import webpage/text and text PDF URLs through one shared UI/CLI/MCP path. Retain PDF original bytes, requested URL and page citations, including redirects and extensionless URLs.

@@ -34,6 +34,8 @@ No account or extra model API key is needed for Aftermark. Installation and fetc
 
 Search finds task keywords in sources and applicable corrections. Read the matching page or subtitle segment, then decide with your agent whether it fits the project. Usage records distinguish referenced, applied, verified and skipped; changed sources leave older evidence clearly marked. A usage record must include the revision actually read. If the source changes during the task, reread its content and corrections and reassess before recording.
 
+Long sources now show a passage covering more distinct task keywords, rather than stopping at the first generic match. PDF pages, subtitle timestamps and original text offsets remain available. This improves where you start reading; applicability is still your agent's judgment.
+
 ## Connect and use
 
 In an activated environment:
@@ -46,15 +48,15 @@ aftermark --data-dir .local/library connect codex --apply
 
 The first command generates project-specific instructions. The next previews Codex registration; `--apply` registers it through Codex's CLI and preserves conflicting entries. Other MCP hosts use the generated JSON. Tools are `recall`, `read_bookmark`, `save_bookmark`, `import_url`, `add_correction` and `record_usage`.
 
-**New in 0.4:** ask your agent to import an article or text PDF URL into a named project. `import_url` fetches the source and saves it; the agent must still retrieve and read it before citing it. The local app and `add --url URL --fetch` use the same importer. HTML/text is limited to 5 MB, PDFs to 20 MB. Video URLs remain link-only unless you supply subtitles.
+Ask your agent to import an article or text PDF URL into a named project. `import_url` fetches the source and saves it; the agent must still retrieve and read it before citing it. The local app and `add --url URL --fetch` use the same importer. HTML/text is limited to 5 MB, PDFs to 20 MB. Video URLs remain link-only unless you supply subtitles.
 
-After upgrading, restart running Aftermark services, reload your agent’s MCP connection and regenerate project instructions to expose `import_url`. Usage records still require `expected_revision` (CLI: `record --revision N`), introduced in 0.3. Existing history and backups are unchanged.
+After upgrading, restart running Aftermark services and reload your agent’s MCP connection. 0.5 improves returned excerpts without changing bookmark ranking, stored sources or backups. Usage records still require `expected_revision` (CLI: `record --revision N`). If upgrading from before 0.4, regenerate project instructions for `import_url`.
 
 [Codex setup and real-client evidence](docs/CODEX.md) · [CLI and source reading](docs/USAGE.md)
 
 ## Does it work?
 
-In 0.4, real Codex CLI imported official MCP documentation, retrieved and read it, compared the current code, and recorded/read back `referenced` because the documented behavior was already implemented. It also imported a synthetic PDF URL, read its page citation, checked project isolation and received an explicit unsupported-video error. Desktop revision-bound recording/readback also passed; desktop URL import and other hosts remain unverified. These are guided checks, not a productivity or unguided-recall benchmark. [Exact validation scope](docs/VALIDATION.md).
+In 0.5, real Codex CLI followed project rules to retrieve/read the saved defect note, reviewed the implementation and found an uncovered excerpt boundary. After the fix, it passed 28 focused checks and recorded/read back the results. The full suite has 63 passing tests. Identical English/Chinese fixtures miss the target passage in the released 0.4 wheel and find it in 0.5. These controlled results are not a general retrieval-accuracy or productivity benchmark; current desktop excerpt behavior and other hosts remain unverified. [Exact validation scope](docs/VALIDATION.md).
 
 ## Your data
 

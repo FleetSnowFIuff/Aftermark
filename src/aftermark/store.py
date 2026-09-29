@@ -11,7 +11,7 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 
-from .sources import locations, read_source
+from .sources import locations, read_source, task_excerpt
 from .models import Bundle, CorrectionInput, ItemInput, UsageInput, new_id, now
 
 
@@ -269,9 +269,9 @@ class Store:
                     candidate["match_locations"] = [key for key, tokens in fields.items() if matched & tokens]
                     matches = [t for t in query_terms if any(t in tokens for tokens in fields.values())]
                     content = item["content"]
-                    positions = [content.lower().find(t) for t in matches if t in content.lower()]
-                    start = max(0, min(positions, default=0) - 160)
-                    candidate.update(excerpt=content[start:start + 1200], excerpt_start=start, matched_terms=matches,
+                    candidate.update(task_excerpt(content, query_terms))
+                    start = candidate["excerpt_start"]
+                    candidate.update(matched_terms=matches,
                                      source_status="text_available" if content else "link_only")
                     candidate["previous_usage"] = [dict(r) for r in db.execute("SELECT outcome,reason,evidence,item_revision,created_at FROM usage WHERE item_id=? AND project=? ORDER BY created_at DESC,id LIMIT 3", (item["id"], project))]
                     candidate["excerpt_locations"] = [m for m in locations(item) if m["start"] < start + 1200 and m["end"] > start][:10]

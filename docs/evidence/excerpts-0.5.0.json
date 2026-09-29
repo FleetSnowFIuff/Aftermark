@@ -1,0 +1,55 @@
+{
+  "scope": "Two controlled long-source fixtures, not a general retrieval benchmark. Same input script run using the released 0.4.0 wheel and current 0.5.0 source.",
+  "before": {
+    "version": "0.4.0",
+    "cases": [
+      {
+        "case": "english",
+        "query": "MCP ToolError import failures",
+        "relevant_passage_present": false,
+        "excerpt_start": 0,
+        "page_ids": [
+          "page-1"
+        ],
+        "original_content_unchanged": true
+      },
+      {
+        "case": "chinese",
+        "query": "跳跃输入缓冲",
+        "relevant_passage_present": false,
+        "excerpt_start": 0,
+        "page_ids": [
+          "page-1"
+        ],
+        "original_content_unchanged": true
+      }
+    ]
+  },
+  "after": {
+    "version": "0.5.0",
+    "cases": [
+      {
+        "case": "english",
+        "query": "MCP ToolError import failures",
+        "relevant_passage_present": true,
+        "excerpt_start": 2273,
+        "page_ids": [
+          "page-1",
+          "page-2"
+        ],
+        "original_content_unchanged": true
+      },
+      {
+        "case": "chinese",
+        "query": "跳跃输入缓冲",
+        "relevant_passage_present": true,
+        "excerpt_start": 2265,
+        "page_ids": [
+          "page-1",
+          "page-2"
+        ],
+        "original_content_unchanged": true
+      }
+    ]
+  }
+}

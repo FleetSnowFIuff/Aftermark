@@ -1,9 +1,51 @@
 """Locations derived from saved PDF markers and subtitle timing lines."""
 import re
+from collections import Counter
+from heapq import merge
 
 PAGE = re.compile(r"^\[Page ([1-9]\d*)\][ \t]*\r?$", re.MULTILINE)
 TIME = r"(?:\d{2,}:)?[0-5]\d:[0-5]\d[.,]\d{3}"
 CUE = re.compile(rf"^(?P<start>{TIME})[ \t]+-->[ \t]+(?P<end>{TIME})(?:[ \t]+[^\r\n]*)?\r?$", re.MULTILINE)
+
+
+def task_excerpt(text: str, query_terms: list[str], limit: int = 1200) -> dict:
+    """Score keyword-anchored windows by distinct coverage, earliest on ties."""
+    wanted = set(query_terms)
+    lowered = text.lower()
+    # Some Unicode lowercase mappings expand; returned offsets must still address the source.
+    offsets = None
+    if len(lowered) != len(text):
+        offsets = [i for i, char in enumerate(text) for _ in char.lower()] + [len(text)]
+    hits = []
+    for word in re.finditer(r"[a-z0-9_]+|[\u3400-\u9fff]+", lowered):
+        token = word.group()
+        pieces = ((i, token[i:i + 2]) for i in range(max(1, len(token) - 1))) if "\u3400" <= token[0] <= "\u9fff" else [(0, token)]
+        for relative, term in pieces:
+            if term in wanted:
+                begin, end = word.start() + relative, word.start() + relative + len(term)
+                if offsets is not None:
+                    begin, end = offsets[begin], offsets[end - 1] + 1
+                hits.append((begin, end, term))
+    best_start, best_terms = 0, set()
+    counts = Counter()
+    left = right = 0
+    # Both edges move forward: repeated keywords do not increase the coverage score.
+    starts = merge((max(0, position - 160) for position, _, _ in hits),
+                   (position for position, _, _ in hits))
+    for start in starts:
+        while right < len(hits) and hits[right][1] <= start + limit:
+            counts[hits[right][2]] += 1
+            right += 1
+        while left < right and hits[left][0] < start:
+            term = hits[left][2]
+            counts[term] -= 1
+            if not counts[term]:
+                del counts[term]
+            left += 1
+        if len(counts) > len(best_terms):
+            best_start, best_terms = start, set(counts)
+    return {"excerpt": text[best_start:best_start + limit], "excerpt_start": best_start,
+            "excerpt_matched_terms": [term for term in query_terms if term in best_terms]}
 
 
 def seconds(value: str) -> float:

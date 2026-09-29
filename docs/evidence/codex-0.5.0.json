@@ -1,0 +1,239 @@
+{
+  "version": "0.5.0",
+  "date": "2026-09-29",
+  "client": "Real Codex CLI, normal --approve-for-me, existing project AGENTS.md, isolated acceptance library",
+  "source": {
+    "id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+    "revision": 1,
+    "content_sha256": "c68782feab9de1f74483d698b9c2602ed317cef8f8872c5180449861c40ff7e8",
+    "type": "Maintainer-authored description of an observed defect, with controlled PDF page markers; not an external paper or a before/after fixture."
+  },
+  "runs": [
+    {
+      "phase": "initial review",
+      "events_sha256": "f432285196a72ab3fcc757c78f6d19aae41dc9c1838fa31773da8916048036b0",
+      "calls": [
+        {
+          "tool": "recall",
+          "status": "completed",
+          "arguments": {
+            "task": "long-source excerpt selection sources.py Store.recall source contents bookmark ranking",
+            "project": "Aftermark"
+          },
+          "candidates": [
+            {
+              "id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+              "revision": 1,
+              "excerpt_start": 3157,
+              "excerpt_matched_terms": [
+                "long",
+                "source",
+                "excerpt",
+                "selection",
+                "sources",
+                "py",
+                "recall",
+                "contents"
+              ]
+            }
+          ]
+        },
+        {
+          "tool": "read_bookmark",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "anchor": "page-2",
+            "limit": 2000
+          },
+          "revision": 1,
+          "anchor": "page-2",
+          "usage_ids": []
+        },
+        {
+          "tool": "recall",
+          "status": "completed",
+          "arguments": {
+            "task": "MCP ToolError import failures",
+            "project": "Aftermark"
+          },
+          "candidates": [
+            {
+              "id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+              "revision": 1,
+              "excerpt_start": 3206,
+              "excerpt_matched_terms": [
+                "mcp",
+                "toolerror",
+                "import",
+                "failures"
+              ]
+            }
+          ]
+        },
+        {
+          "tool": "read_bookmark",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "limit": 12000
+          },
+          "revision": 1,
+          "anchor": "",
+          "usage_ids": []
+        },
+        {
+          "tool": "record_usage",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "task": "Controlled Codex review of long-source excerpt selection in sources.py and Store.recall",
+            "outcome": "referenced",
+            "reason": "Read revision 1 and used its observed-defect description and checklist to guide this review. No implementation, source, instruction, or correction edits. The observed late-passage problem improves, but an additional coverage boundary defect remains.",
+            "evidence": "Real Codex MCP recall for 'MCP ToolError import failures' returned excerpt_start=3206, all four terms, and page-2; revision-checked page-2 and full-source reads succeeded. Recomputed old first-hit selection on the same fixture: start=0, no ToolError or page-2. Focused pytest tests/test_excerpts.py tests/test_sources.py tests/test_store.py -q -p no:cacheprovider --basetemp .local/tests-050-codex: 25 passed in 0.83s. Read-only comparison with git HEAD Store.recall: 25 temporary test libraries, 2400 query/scope comparisons, identical candidate order and non-excerpt fields, unchanged exports. Boundary probe: alpha at 2000 and beta at 3100 fit in text[2000:3200], but task_excerpt selects start 1840 and only alpha. Controlled acceptance and synthetic regression evidence only; no real research gain demonstrated."
+          },
+          "usage_id": "dee88a20-6400-444c-8e32-32acb449e0dc",
+          "outcome": "referenced"
+        },
+        {
+          "tool": "record_usage",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "task": "Controlled Codex excerpt review: superseding inaccurate usage evidence",
+            "outcome": "referenced",
+            "reason": "This entry explicitly supersedes the incorrect baseline claim in usage dee88a20-6400-444c-8e32-32acb449e0dc. That entry was composed before inspecting the calculation output. The MCP bookmark describes the historic defect but does not reproduce it for the query used. No source or correction was edited.",
+            "evidence": "Actual full-source read at revision 1 returned 4068 characters. Recomputing the old first-hit selection for 'MCP ToolError import failures' on this MCP bookmark gives excerpt_start=3206, contains ToolError and page-2, the same start as current MCP recall. The prior claim 'start=0, no ToolError or page-2' for this bookmark is FALSE and withdrawn. Current real Codex MCP recall/read succeeds but does not establish before/after improvement on this bookmark. Independently observed results remain: focused pytest 25 passed in 0.83s; 25 temporary libraries and 2400 query/scope comparisons with git HEAD gave identical candidate order and non-excerpt fields and unchanged exports; boundary probe misses beta at 3100 when alpha at 2000 and both fit in a 1200-character window. Controlled acceptance and synthetic tests only; no real research gain demonstrated."
+          },
+          "usage_id": "7a855dce-7834-478a-b5ba-e6d8d8359ac8",
+          "outcome": "referenced"
+        }
+      ],
+      "observed_check_outputs": [
+        "25 passed in 0.83s",
+        "{\"boundary_probe\": {\"alpha_offset\": 2000, \"beta_offset\": 3100, \"actual_start\": 1840, \"actual_terms\": [\"alpha\"], \"alternative_start\": 2000, \"alternative_terms\": [\"alpha\", \"beta\"]}}",
+        "{\"baseline\": \"git HEAD Store.recall\", \"readonly_libraries\": 25, \"query_scope_comparisons\": 2400, \"ranking_and_nonexcerpt_fields_identical\": true, \"exports_unchanged\": true}"
+      ]
+    },
+    {
+      "phase": "boundary fix recheck",
+      "events_sha256": "27b7320e0c0191669a9a3b3d36199611dca27569893cd220704b3fc934a11edf",
+      "calls": [
+        {
+          "tool": "recall",
+          "status": "completed",
+          "arguments": {
+            "task": "excerpt selection alpha beta boundary 2000 3100",
+            "project": "Aftermark",
+            "limit": 10
+          },
+          "candidates": [
+            {
+              "id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+              "revision": 1,
+              "excerpt_start": 3438,
+              "excerpt_matched_terms": [
+                "excerpt",
+                "selection"
+              ]
+            }
+          ]
+        },
+        {
+          "tool": "read_bookmark",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "offset": 0,
+            "limit": 10000
+          },
+          "revision": 1,
+          "anchor": "",
+          "usage_ids": [
+            "7a855dce-7834-478a-b5ba-e6d8d8359ac8",
+            "dee88a20-6400-444c-8e32-32acb449e0dc"
+          ]
+        },
+        {
+          "tool": "record_usage",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "outcome": "verified",
+            "task": "Re-review current excerpt-selection boundary fix: alpha at 2000, beta at 3100",
+            "reason": "Read revision 1 and both prior usage reports. Used the note as a defect description and review checklist, not a before/after fixture. The second report retracts the first report's incorrect old-offset claim; this review does not revive that claim. Current local sources.py and Store.recall resolve the specified boundary. No code, existing sources, corrections, or instructions edited.",
+            "evidence": "Executed .venv/Scripts/python.exe -m pytest -q -p no:cacheprovider --basetemp .local/tests-050-codex-recheck tests/test_excerpts.py tests/test_sources.py tests/test_store.py: 28 passed in 0.87s. Inspected sources.py merged candidate starts at hit-160 and hit positions and full-token end check; Store.recall calls task_excerpt and uses its start for locations. Separate synthetic temporary-library probes under the test directory verified task_excerpt and Store.recall agree: alpha=2000/beta=3100 => start=2000, length=1200, matched=[alpha,beta]; beta=3196 => same result, exact fit; beta=3197 => start=1840, matched=[alpha], no partial-token credit. Exports unchanged by recall and other-project results empty in each probe. These are local code/test and synthetic integration results, not before/after evidence from this acceptance note, independent Aftermark verification, or research-benefit evidence. Readback of this usage record will be performed because the user explicitly requested it; no autonomous behavior claim."
+          },
+          "usage_id": "45dc6881-4c19-4725-b61f-527e401f9a63",
+          "outcome": "verified"
+        },
+        {
+          "tool": "read_bookmark",
+          "status": "completed",
+          "arguments": {
+            "bookmark_id": "331cac21-b6d2-4a1a-a9ca-1b5d39aabcff",
+            "expected_revision": 1,
+            "project": "Aftermark",
+            "offset": 3299,
+            "limit": 769
+          },
+          "revision": 1,
+          "anchor": "",
+          "usage_ids": [
+            "45dc6881-4c19-4725-b61f-527e401f9a63",
+            "7a855dce-7834-478a-b5ba-e6d8d8359ac8",
+            "dee88a20-6400-444c-8e32-32acb449e0dc"
+          ]
+        }
+      ],
+      "observed_check_outputs": [
+        "28 passed in 0.87s"
+      ]
+    }
+  ],
+  "persisted_usage": [
+    {
+      "id": "dee88a20-6400-444c-8e32-32acb449e0dc",
+      "outcome": "referenced",
+      "item_revision": 1,
+      "reason": "Read revision 1 and used its observed-defect description and checklist to guide this review. No implementation, source, instruction, or correction edits. The observed late-passage problem improves, but an additional coverage boundary defect remains."
+    },
+    {
+      "id": "7a855dce-7834-478a-b5ba-e6d8d8359ac8",
+      "outcome": "referenced",
+      "item_revision": 1,
+      "reason": "This entry explicitly supersedes the incorrect baseline claim in usage dee88a20-6400-444c-8e32-32acb449e0dc. That entry was composed before inspecting the calculation output. The MCP bookmark describes the historic defect but does not reproduce it for the query used. No source or correction was edited."
+    },
+    {
+      "id": "45dc6881-4c19-4725-b61f-527e401f9a63",
+      "outcome": "verified",
+      "item_revision": 1,
+      "reason": "Read revision 1 and both prior usage reports. Used the note as a defect description and review checklist, not a before/after fixture. The second report retracts the first report's incorrect old-offset claim; this review does not revive that claim. Current local sources.py and Store.recall resolve the specified boundary. No code, existing sources, corrections, or instructions edited."
+    }
+  ],
+  "findings": {
+    "first_run": "Found a real uncovered boundary: 160-character leading context displaced two keywords that fit in 1200 characters.",
+    "fix": "Also consider windows starting directly at each keyword; full regression 63 passed.",
+    "second_run": "28 focused checks passed; explicit record/readback returned the same verified usage ID.",
+    "record_correction": "First usage record incorrectly claimed that the defect-description bookmark itself had old excerpt_start=0. A second referenced record retracts that statement. Both remain in the isolated library. They must be read together.",
+    "baseline": "The separate excerpts-0.5.0.json compares actual 0.4.0 and 0.5.0 on identical controlled fixtures."
+  },
+  "limits": [
+    "First prompt did not name tool calls, but project rules explicitly require recall/read/record; this is not an unprompted or blinded benchmark.",
+    "Second prompt explicitly requested recording/readback.",
+    "The verified outcome reports code checks, not a research method or measured productivity gain.",
+    "New excerpt selection not revalidated through the current desktop MCP session or other hosts."
+  ]
+}
