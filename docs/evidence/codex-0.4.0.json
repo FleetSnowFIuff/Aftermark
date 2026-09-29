@@ -1,0 +1,186 @@
+{
+  "version": "0.4.0",
+  "date": "2026-09-29",
+  "environment": {
+    "platform": "Windows",
+    "python": "3.13.9",
+    "codex_cli": "0.158.0-alpha.2.1",
+    "model": "gpt-6-astra",
+    "approval": "normal --approve-for-me; no global sandbox bypass"
+  },
+  "scope": "Guided real Codex CLI acceptance in an isolated library. Official documentation plus a clearly synthetic PDF fixture; no productivity or autonomous-recall claim.",
+  "startup_issue": "Initial runner used a JSON object where Codex -c expected TOML for env; failed before task execution. Corrected to an individual env.NO_PROXY key. Raw failure retained locally.",
+  "protocol_test_issue": "Initial stdio test inherited a proxy without loopback exclusion (502). Explicit NO_PROXY in the test child fixed it; application proxy behavior was not changed.",
+  "sources": [
+    {
+      "id": "6c52f329-087f-4b99-95fa-072ceea14554",
+      "kind": "web",
+      "revision": 1,
+      "source_url": "https://py.sdk.modelcontextprotocol.io/servers/handling-errors/",
+      "content_sha256": "e43b2278aff07c1167039e868b786835a24c9aacbb2601596329764a1f400fd6",
+      "synthetic": false
+    },
+    {
+      "id": "9c87e998-befb-41e9-a319-d339e7b09d75",
+      "kind": "pdf",
+      "revision": 1,
+      "source_url": "http://127.0.0.1:43824/paper.pdf",
+      "content_sha256": "91079c59b4024e36d9a3f336ec242594248012d7aa0ab0cc4e2e8dc739aeca27",
+      "synthetic": true
+    }
+  ],
+  "calls": [
+    {
+      "tool": "import_url",
+      "status": "completed",
+      "arguments": {
+        "url": "https://py.sdk.modelcontextprotocol.io/servers/handling-errors/",
+        "project": "Aftermark",
+        "title": "MCP tool errors",
+        "intent": "Check whether our tool import errors can give callers an actionable reason."
+      },
+      "id": "6c52f329-087f-4b99-95fa-072ceea14554",
+      "revision": 1,
+      "original_saved": false
+    },
+    {
+      "tool": "recall",
+      "status": "completed",
+      "arguments": {
+        "task": "ToolError",
+        "project": "Aftermark"
+      },
+      "candidate_ids": [
+        "6c52f329-087f-4b99-95fa-072ceea14554"
+      ]
+    },
+    {
+      "tool": "read_bookmark",
+      "status": "completed",
+      "arguments": {
+        "bookmark_id": "6c52f329-087f-4b99-95fa-072ceea14554",
+        "project": "Aftermark",
+        "expected_revision": 1
+      },
+      "id": "6c52f329-087f-4b99-95fa-072ceea14554",
+      "revision": 1,
+      "citation": "MCP tool errors — characters 0:9577 (Aftermark 6c52f329-087f-4b99-95fa-072ceea14554, v1)",
+      "next_offset": null,
+      "usage_ids": []
+    },
+    {
+      "tool": "record_usage",
+      "status": "completed",
+      "arguments": {
+        "bookmark_id": "6c52f329-087f-4b99-95fa-072ceea14554",
+        "project": "Aftermark",
+        "expected_revision": 1,
+        "task": "Guided real Codex acceptance for Aftermark 0.4.0: compare actionable import errors with MCP ToolError documentation.",
+        "outcome": "referenced",
+        "reason": "Read imported documentation at revision 1 and compared src/aftermark/mcp_server.py. Already implemented: import_url catches httpx.HTTPError and ValueError and raises ToolError with 'Import failed; no bookmark saved.' plus the underlying reason before store.create. No code change.",
+        "evidence": "Read-only inspection of src/aftermark/mcp_server.py; source citation: MCP tool errors — characters 0:9577 (Aftermark 6c52f329-087f-4b99-95fa-072ceea14554, v1). This record reports reference/comparison only; no test-suite run or code improvement claimed."
+      },
+      "id": "2d9cdb71-fbb2-4676-a47d-7a5e3136a46a",
+      "item_revision": 1,
+      "outcome": "referenced"
+    },
+    {
+      "tool": "read_bookmark",
+      "status": "completed",
+      "arguments": {
+        "bookmark_id": "6c52f329-087f-4b99-95fa-072ceea14554",
+        "project": "Aftermark",
+        "expected_revision": 1,
+        "limit": 1
+      },
+      "id": "6c52f329-087f-4b99-95fa-072ceea14554",
+      "revision": 1,
+      "citation": "MCP tool errors — characters 0:1 (Aftermark 6c52f329-087f-4b99-95fa-072ceea14554, v1)",
+      "next_offset": 1,
+      "usage_ids": [
+        "2d9cdb71-fbb2-4676-a47d-7a5e3136a46a"
+      ]
+    },
+    {
+      "tool": "import_url",
+      "status": "completed",
+      "arguments": {
+        "url": "http://127.0.0.1:43824/paper.pdf",
+        "project": "Aftermark",
+        "title": "Synthetic URL PDF acceptance"
+      },
+      "id": "9c87e998-befb-41e9-a319-d339e7b09d75",
+      "revision": 1,
+      "original_saved": true
+    },
+    {
+      "tool": "recall",
+      "status": "completed",
+      "arguments": {
+        "task": "jump buffering",
+        "project": "Aftermark"
+      },
+      "candidate_ids": [
+        "9c87e998-befb-41e9-a319-d339e7b09d75"
+      ]
+    },
+    {
+      "tool": "recall",
+      "status": "completed",
+      "arguments": {
+        "task": "jump buffering",
+        "project": "Aftermark-url-other"
+      },
+      "candidate_ids": []
+    },
+    {
+      "tool": "read_bookmark",
+      "status": "completed",
+      "arguments": {
+        "bookmark_id": "9c87e998-befb-41e9-a319-d339e7b09d75",
+        "project": "Aftermark",
+        "anchor": "page-1",
+        "expected_revision": 1
+      },
+      "id": "9c87e998-befb-41e9-a319-d339e7b09d75",
+      "revision": 1,
+      "citation": "Synthetic URL PDF acceptance — Page 1 (Aftermark 9c87e998-befb-41e9-a319-d339e7b09d75, v1)",
+      "next_offset": null,
+      "usage_ids": []
+    },
+    {
+      "tool": "import_url",
+      "status": "failed",
+      "arguments": {
+        "url": "http://127.0.0.1:43824/video.mp4",
+        "project": "Aftermark"
+      },
+      "error": [
+        "Error executing tool import_url: Import failed; no bookmark saved. Unsupported content type: video/mp4. Use an HTML/text page or a text PDF URL."
+      ]
+    }
+  ],
+  "independent_store_check": {
+    "item_count": 2,
+    "web_usage_id": "2d9cdb71-fbb2-4676-a47d-7a5e3136a46a",
+    "web_outcome": "referenced",
+    "pdf_usage_count": 0,
+    "original_pdf_bytes_match": true,
+    "unsupported_video_saved": false
+  },
+  "desktop": {
+    "scope": "Current desktop conversation, revision-bound record/readback; URL import not in this session tool catalog.",
+    "source_id": "f8164592-a58d-414a-a7f3-ffa63e6f12c6",
+    "expected_revision": 3,
+    "persisted_usage_id": "647f770f-6225-49bf-8014-b9d841457845",
+    "outcome": "referenced",
+    "readback": true,
+    "synthetic_source": true
+  },
+  "limits": [
+    "Prompt explicitly specified import/read/record steps.",
+    "PDF is a local synthetic fixture, not external research.",
+    "Only code comparison, no code change or engineering improvement from the document.",
+    "New URL import not tested in desktop; other hosts not tested."
+  ]
+}

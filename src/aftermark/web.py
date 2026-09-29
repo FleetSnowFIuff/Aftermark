@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from . import __version__
-from .ingest import MAX_FILE_BYTES, fetch_page, parse_file
+from .ingest import MAX_FILE_BYTES, fetch_url, parse_file
 from .integration import config
 from .models import Bundle, CorrectionInput, InputModel, ItemInput, SearchInput, UsageInput
 from .store import RevisionConflict, Store
@@ -111,7 +111,8 @@ def create_app(home: Path | str | None = None) -> FastAPI:
     @app.post("/api/import/web", status_code=201)
     def import_web(value: WebImport):
         args = value.model_dump()
-        return store.create(fetch_page(**args))
+        item, attachment = fetch_url(**args)
+        return store.create(item, attachment)
 
     @app.post("/api/import/file", status_code=201)
     async def import_file(file: UploadFile = File(...), title: str = Form(""), intent: str = Form(""),

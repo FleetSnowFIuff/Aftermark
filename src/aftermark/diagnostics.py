@@ -14,7 +14,7 @@ async def check_connection(store: Store) -> dict:
     with anyio.fail_after(20):
         async with Client(StdioServerParameters(command=entry["command"], args=entry["args"])) as client:
             names = sorted(tool.name for tool in (await client.list_tools()).tools)
-            required = {"recall", "read_bookmark", "save_bookmark", "add_correction", "record_usage"}
+            required = {"recall", "read_bookmark", "save_bookmark", "add_correction", "record_usage", "import_url"}
             if not required.issubset(names):
                 raise RuntimeError("The MCP server is missing required Aftermark tools.")
             response = await client.call_tool("recall", {"task": "aftermark_connection_check"})

@@ -22,7 +22,9 @@ The library UI can browse all local projects; the task-oriented MCP reader enfor
 
 No model client, provider key, orchestration loop or background job queue is required. The host agent supplies reasoning. Source text is never executed or inserted as HTML. The UI renders imported content as text. The local HTTP service binds to loopback, checks the Host header, and rejects cross-origin requests.
 
-Original uploaded files are stored in SQLite blobs and downloaded as attachments. Backups contain them as base64; this is a small personal library format, not a streaming data lake. Imports are validated before a transaction and add new bookmark IDs only.
+Original uploaded files and imported PDF downloads are stored in SQLite blobs and downloaded as attachments. Backups contain them as base64; this is a small personal library format, not a streaming data lake. Imports are validated before a transaction and add new bookmark IDs only.
+
+URL imports validate inputs before fetching, follow at most five redirects and bound decoded response bytes by format. They accept declared HTML/text or PDF content types and reuse the local PDF parser. The requested URL is retained; the final URL supplies the PDF filename. UI, CLI and MCP share this path. MCP marks import_url as a network/write operation and returns metadata only, keeping import distinct from source reading. Expected fetch/extraction errors are exposed through ToolError; unrelated storage failures keep the SDK behavior.
 
 ## Source-of-truth links
 

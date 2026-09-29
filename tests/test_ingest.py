@@ -13,13 +13,14 @@ def test_web_extraction_and_remote_failure(monkeypatch):
     client = httpx.Client
     transport = httpx.MockTransport(lambda request: httpx.Response(200, headers={"Content-Type": "text/html"}, content=html))
     monkeypatch.setattr(ingest.httpx, "Client", lambda **kwargs: client(transport=transport, **kwargs))
-    item = ingest.fetch_page("https://example.com/method")
+    item, attachment = ingest.fetch_url("https://example.com/method")
+    assert attachment is None
     assert item.title == "Useful method"
     assert "Keep this method" in item.content
     assert "Ignore menu" not in item.content and "alert" not in item.content
     transport = httpx.MockTransport(lambda request: httpx.Response(404))
     with pytest.raises(httpx.HTTPStatusError):
-        ingest.fetch_page("https://example.com/missing")
+        ingest.fetch_url("https://example.com/missing")
 
 
 def test_pdf_has_page_provenance_and_preserves_original():

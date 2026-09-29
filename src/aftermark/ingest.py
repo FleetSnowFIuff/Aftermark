@@ -2,13 +2,14 @@
 
 from io import BytesIO
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 import httpx
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
 from pypdf.errors import PdfReadError
 
+from . import __version__
 from .models import ItemInput
 
 MAX_FILE_BYTES = 20 * 1024 * 1024
@@ -23,33 +24,42 @@ def extract_html(data: bytes, url: str) -> tuple[str, str]:
     main = soup.find("article") or soup.find("main") or soup.body or soup
     text = "\n".join(line.strip() for line in main.get_text("\n").splitlines() if line.strip())
     if not text:
-        raise ValueError("This page has no readable text. Paste the content manually; JavaScript-only pages are not rendered in v0.1.")
+        raise ValueError("This page has no readable text. Paste the content manually; JavaScript-only pages are not rendered.")
     return str(title)[:240], text
 
 
-def fetch_page(url: str, *, title: str = "", intent: str = "", project: str = "", role: str = "reference", tags: list[str] | None = None) -> ItemInput:
-    # Validate the input at the network boundary; imported pages remain data.
-    ItemInput(title=title or url[:240], source_url=url)
+def fetch_url(url: str, *, title: str = "", intent: str = "", project: str = "", role: str = "reference",
+              tags: list[str] | None = None) -> tuple[ItemInput, tuple[str, str, bytes] | None]:
+    """Import declared HTML/text or a text PDF; retain PDF bytes and the requested URL."""
+    common = dict(title=title, intent=intent, project=project, role=role, tags=tags or [])
+    ItemInput(**{**common, "title": title or url[:240]}, source_url=url)
     with httpx.Client(timeout=20, follow_redirects=True, max_redirects=5) as client:
-        with client.stream("GET", url, headers={"User-Agent": "Aftermark/0.1 (personal knowledge importer)"}) as response:
+        with client.stream("GET", url, headers={"User-Agent": f"Aftermark/{__version__} (personal knowledge importer)"}) as response:
             response.raise_for_status()
-            mime = response.headers.get("content-type", "").split(";")[0].lower()
-            if mime not in {"text/html", "application/xhtml+xml", "text/plain", "text/markdown"}:
-                raise ValueError(f"Unsupported web content type: {mime or 'unknown'}. Upload PDF files directly.")
+            mime = response.headers.get("content-type", "").split(";")[0].strip().lower()
+            if mime not in {"text/html", "application/xhtml+xml", "text/plain", "text/markdown", "application/pdf"}:
+                raise ValueError(f"Unsupported content type: {mime or 'unknown'}. Use an HTML/text page or a text PDF URL.")
+            byte_limit = MAX_FILE_BYTES if mime == "application/pdf" else MAX_WEB_BYTES
             chunks = []
             size = 0
             for chunk in response.iter_bytes():
                 size += len(chunk)
-                if size > MAX_WEB_BYTES:
-                    raise ValueError("Page exceeds the 5 MB import limit.")
+                if size > byte_limit:
+                    raise ValueError("PDF exceeds the 20 MB import limit." if mime == "application/pdf" else "Page exceeds the 5 MB import limit.")
                 chunks.append(chunk)
             data = b"".join(chunks)
+            if mime == "application/pdf":
+                name = Path(unquote(response.url.path).replace("\\", "/")).name or "document"
+                if not name.lower().endswith(".pdf"):
+                    name += ".pdf"
+                return parse_file(name, data, source_url=url, **common)
             if mime in {"text/plain", "text/markdown"}:
                 page_title, content = title or urlsplit(url).hostname, data.decode(response.encoding or "utf-8")
+                if not content.strip():
+                    raise ValueError("This URL has no readable text; no bookmark was imported.")
             else:
                 page_title, content = extract_html(data, str(response.url))
-    return ItemInput(title=title or page_title, content=content, kind="web", source_url=url,
-                     intent=intent, project=project, role=role, tags=tags or [])
+    return ItemInput(**{**common, "title": title or page_title}, content=content, kind="web", source_url=url), None
 
 
 def parse_file(filename: str, data: bytes, *, title: str = "", intent: str = "", project: str = "",
@@ -67,7 +77,7 @@ def parse_file(filename: str, data: bytes, *, title: str = "", intent: str = "",
         except PdfReadError as error:
             raise ValueError("This file could not be read as a PDF.") from error
         if not any(page.strip() for page in pages):
-            raise ValueError("This PDF has no extractable text. OCR is not included in v0.1; paste a transcription instead.")
+            raise ValueError("This PDF has no extractable text. OCR is not included; paste a transcription instead.")
         content = "\n\n".join(f"[Page {i}]\n{text}" for i, text in enumerate(pages, 1))
         kind, mime = "pdf", "application/pdf"
     elif suffix in {".txt", ".md", ".srt", ".vtt"}:

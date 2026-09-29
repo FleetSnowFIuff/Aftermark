@@ -1,6 +1,6 @@
 # Short roadmap
 
-The current local preview contains the complete save → retrieve → read → record → correct workflow, shared by the UI, CLI and MCP. Project-specific onboarding and current-release downloads are now part of that foundation.
+The current local preview contains the complete save → retrieve → read → record → correct workflow, shared by the UI, CLI and MCP. URL imports now fetch ordinary webpage text and text PDFs through all three interfaces. Project-specific onboarding and current-release downloads are part of that foundation.
 
 Next, in order:
 

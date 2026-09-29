@@ -6,7 +6,7 @@ from pathlib import Path
 import httpx
 
 from . import __version__
-from .ingest import fetch_page, parse_file
+from .ingest import fetch_url, parse_file
 from .integration import config
 from .models import Bundle, CorrectionInput, ItemInput, UsageInput
 from .store import Store
@@ -35,7 +35,7 @@ def parser() -> argparse.ArgumentParser:
     source.add_argument("--text")
     source.add_argument("--url")
     source.add_argument("--file", type=Path)
-    add.add_argument("--fetch", action="store_true", help="Extract a URL's text; otherwise save the link only")
+    add.add_argument("--fetch", action="store_true", help="Import webpage text or a text PDF; otherwise save the link only")
     add.add_argument("--kind", choices=["note", "web", "pdf", "video"], default="note")
     add.add_argument("--intent", default="")
     add.add_argument("--project", default="")
@@ -127,8 +127,8 @@ def run(args):
             item, attachment = parse_file(args.file.name, args.file.read_bytes(), **common)
             result = store.create(item, attachment)
         elif args.url and args.fetch:
-            item = fetch_page(args.url, **common)
-            result = store.create(item)
+            item, attachment = fetch_url(args.url, **common)
+            result = store.create(item, attachment)
         else:
             if not args.title:
                 raise ValueError("Give the bookmark a --title.")

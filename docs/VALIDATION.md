@@ -1,27 +1,32 @@
 # Validation — current local preview
 
-Windows, Python 3.13.9. 43 automated tests pass (`-p no:cacheprovider` on the final suite).
+Windows, Python 3.13.9. 53 automated tests pass (`-p no:cacheprovider` on the final suite).
 
 | Area | Evidence |
 | --- | --- |
 | Core library | Project isolation, English/Chinese keyword retrieval, scoped corrections, archival exclusion, original-file backups and restore |
 | Revisions | Required read revision on new records, atomic conflict rejection/recovery through Store/HTTP/CLI/MCP, unchanged backup roundtrip, stale usage flags, revision-aware reads and migration from schema 1 to 2 without rewriting exported data |
 | Sources | Real two-page PDF extraction, retained original bytes, SRT/VTT timing, Unicode offsets and bounded reads |
+| URL imports | Loopback HTTP fixtures through UI API/CLI/MCP; redirected extensionless PDF, retained bytes and backup roundtrip, page reads, project isolation, metadata-only tool response, empty/invalid/unsupported input and download limits |
 | Interfaces | HTTP workflows, real MCP stdio calls and read/write annotations, CLI/API diagnostics |
 | Onboarding | Codex preview/apply and conflict handling; project-specific instructions via CLI/API, Chinese/quoted names, personal scope and unchanged MCP connection |
 | Codex clients | Actual CLI and desktop recall/read/record/readback, with limitations documented in [CODEX.md](CODEX.md) |
 
 Project-guidance and revision-bound recording UI have API and JavaScript syntax checks; interactive browser acceptance remains pending. Earlier manual browser checks do not validate subsequent UI changes. macOS/Linux launcher execution and other agent hosts remain unverified.
 
-The 0.3.0 wheel was installed into a fresh Windows virtual environment; version reporting and an actual MCP doctor handshake/recall passed. Package files were checked against the release source.
+The 0.4.0 wheel was installed into a fresh Windows virtual environment; version reporting, actual MCP doctor handshake/recall with all six tools, and PDF URL import passed. Packaged application files were compared byte-for-byte with the release source. The introduction's inline JavaScript and the app script passed syntax checks; the standalone and packaged introduction match.
 
 The [CI template](ci-example.yml) is not enabled because the current publishing credential lacks workflow scope. No remote CI success is claimed.
 
 ## Current real-client acceptance
 
-Codex CLI read the actual reproduced revision-attribution defect, inspected the fix and ran four focused checks from the source and its correction. It observed an explicit stale-write refusal, reread v3, recorded verified and independently read that record back. Project isolation passed. The first run was blocked by the shell/approval environment and stayed referenced; the user then authorized single-command escalation for the second run. Both CLI pytest commands passed with cache-write permission warnings. See [0.3 evidence](evidence/codex-0.3.0.json).
+In 0.4, Codex CLI made ten actual Aftermark calls: imported official MCP ToolError documentation, recalled/read it at revision 1, compared existing code and recorded/read back referenced; imported a synthetic PDF URL and read page 1; checked another project returned no candidates; received an actionable unsupported-video error. Independent store inspection found exactly two imports and one referenced record, with no failed-video bookmark. See [0.4 evidence](evidence/codex-0.4.0.json).
 
-The separate test library contains a maintainer-authored real defect record and controlled corrections, not user research. This is prompted acceptance, not measured engineering gain or an unguided recall benchmark. New desktop writeback still needs a refreshed tool catalog and its own run.
+The initial acceptance launcher failed on its environment override syntax before Codex ran; correcting the TOML override allowed the real run. A protocol test initially hit an environment proxy for loopback; the test child now explicitly excludes loopback from proxies. These were harness setup fixes, not hidden application fallbacks.
+
+The continuing desktop conversation also recorded a referenced result with expected_revision=3 and independently read back the same usage ID. It used the earlier synthetic acceptance note. New desktop URL import remains untested because this session's tool catalog has not reloaded. Official documentation and synthetic fixtures remain distinguished. None of these guided checks measures engineering gain or reliable autonomous recall.
+
+The earlier 0.3 Codex run inspected a real reproduced defect, ran four focused checks, recovered from a stale revision and read back verified. Its first blocked run remains referenced. See [0.3 evidence](evidence/codex-0.3.0.json).
 
 ## Earlier client checks
 

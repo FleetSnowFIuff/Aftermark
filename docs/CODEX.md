@@ -68,4 +68,14 @@ Two real Codex CLI runs used an isolated library containing the maintainer-autho
 | Recovery | Recalled and read v3, reassessed and recorded verified with the actual checks; a separate read returned the same usage ID at v3. |
 | Isolation | Another project returned no candidates and could not read the source by ID. |
 
-[Machine-readable evidence](evidence/codex-0.3.0.json) includes source hashes, tool-event summaries and persisted record IDs. Raw logs stay local. The first record remains referenced at v2; the second is verified at v3. The current desktop catalog predates the new argument: this is CLI evidence, not a claim that the new desktop contract was tested.
+[Machine-readable evidence](evidence/codex-0.3.0.json) includes source hashes, tool-event summaries and persisted record IDs. Raw logs stay local. The first record remains referenced at v2; the second is verified at v3. At that release, the desktop catalog predated the new argument; see the subsequent check below.
+
+## URL import — 0.4.0, September 29
+
+The real Codex CLI imported the [official MCP error-handling documentation](https://py.sdk.modelcontextprotocol.io/servers/handling-errors/) into a separate acceptance library. It recalled ToolError, read revision 1, inspected `src/aftermark/mcp_server.py`, and concluded the documented error handling was already implemented. It recorded **referenced**, then read back the same record. No new code change or improvement was claimed.
+
+It also imported a URL serving a labeled synthetic PDF, recalled its content and read `page-1` at revision 1 with a citation. A different project returned no candidates. Importing a `video/mp4` URL returned a clear unsupported-format error and no success metadata. Independent store inspection found exactly two bookmarks, one referenced usage record and no video bookmark. Ten MCP calls completed the requested workflow, including the expected failed import.
+
+The test used normal automatic approval. Its initial launcher failed before execution because an environment override used JSON instead of TOML; correcting that argument enabled the run. Loopback fixtures explicitly bypass the test environment's HTTP proxy. These facts and the source/record IDs are in [0.4 evidence](evidence/codex-0.4.0.json).
+
+Separately, this desktop conversation successfully supplied expected_revision=3 to record_usage and read back the saved referenced record on the synthetic acceptance note. That validates the new writeback contract here. This desktop session does not yet expose import_url: reload MCP after upgrading to use it. Desktop URL import and other hosts remain unverified. The prompt specified the workflow, so this is not an autonomous-recall benchmark.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-09-29
+
+- Import webpage/text and text PDF URLs through one shared UI/CLI/MCP path. Retain PDF original bytes, requested URL and page citations, including redirects and extensionless URLs.
+- Add MCP `import_url` with explicit external-network/write annotations. Return metadata only; require a subsequent source read before relying on the import. Link-only saving remains available.
+- Bound HTML/text downloads to 5 MB and PDFs to 20 MB. Reject unsupported media, empty text and unreadable PDFs without saving a bookmark; surface actionable MCP errors.
+- Real Codex CLI imported official documentation, compared existing code and recorded/read back referenced; imported/read a synthetic PDF page; checked isolation and unsupported-video failure. Desktop revision-bound writeback/readback also passed. Desktop URL import remains unverified.
+- Update bilingual onboarding and introduction. No database or backup-format change.
+
 ## 0.3.0 — 2026-09-28
 
 - Bind every new usage report to the revision actually read. Reject stale reports before writing history; serialize the check and insert in one transaction.

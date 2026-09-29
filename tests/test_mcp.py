@@ -9,10 +9,10 @@ def test_real_stdio_roundtrip(tmp_path):
         params = StdioServerParameters(command=sys.executable, args=["-m", "aftermark", "--data-dir", str(tmp_path / "mcp"), "mcp"])
         async with Client(params) as client:
             tools = await client.list_tools()
-            assert {tool.name for tool in tools.tools} == {"recall", "read_bookmark", "save_bookmark", "record_usage", "add_correction"}
+            assert {tool.name for tool in tools.tools} == {"recall", "read_bookmark", "save_bookmark", "record_usage", "add_correction", "import_url"}
             for tool in tools.tools:
                 assert tool.annotations.read_only_hint == (tool.name in {"recall", "read_bookmark"})
-                assert tool.annotations.open_world_hint is False
+                assert tool.annotations.open_world_hint == (tool.name == "import_url")
             saved = await client.call_tool("save_bookmark", {"title": "Jump buffer", "content": "Keep recent jump input", "intent": "Keep the buttons", "project": "game", "role": "method"})
             item_id = saved.structured_content["id"]
             empty = await client.call_tool("recall", {"task": "jump", "project": "other"})

@@ -5,6 +5,7 @@ Activate your environment. Use `--data-dir .local/library` from the project fold
 ```sh
 aftermark --data-dir .local/library add --title "Keep our brand" --text "Borrow hierarchy, keep the existing palette." --intent "Keep our brand colors." --role rule --project my-site
 aftermark --data-dir .local/library add --file paper.pdf
+aftermark --data-dir .local/library add --url https://example.com/paper.pdf --fetch --project my-game
 aftermark --data-dir .local/library recall "improve layout" --project my-site
 aftermark --data-dir .local/library config --project my-site
 aftermark --data-dir .local/library correct BOOKMARK_ID "For prototypes only." --project my-site
@@ -13,6 +14,14 @@ aftermark --data-dir .local/library import backup.json
 ```
 
 `config --project ""` explicitly chooses personal knowledge. Omitting `--project` retains generic instructions that ask the agent to use an exact project name. No client configuration is rewritten by `config`.
+
+## Import a URL
+
+In the app, paste a URL and keep **Import webpage text or PDF** checked. From an agent, ask it to import the URL into your exact project using `import_url`. The CLI uses `add --url URL --fetch`. These share one importer: declared HTML/plain text/Markdown up to 5 MB, or `application/pdf` up to 20 MB. PDF downloads retain their original bytes, source URL and page markers, including when the URL redirects or has no `.pdf` suffix.
+
+`import_url` returns metadata and the saved revision, not the full source. Follow with `recall` and `read_bookmark(expected_revision=...)` before relying on the material. Importing is not reading, adoption or verification. Each successful import creates a new bookmark; it does not deduplicate or refresh an existing one. Do not retry a successful call.
+
+Without `--fetch` (or with the checkbox off), save a title and URL as a link only. MCP `save_bookmark` also does not fetch URLs. Video URLs must use that path; supply SRT/VTT separately for searchable timing. Login, JavaScript rendering, OCR and automatic transcription are unsupported. HTTP, unsupported-format, empty-text, unreadable-PDF and size errors do not save a bookmark. Servers must send a supported Content-Type; binary downloads labeled `application/octet-stream` are not guessed to be PDFs.
 
 Recall returns `excerpt_locations`. Pass an actual location ID and revision to MCP `read_bookmark` as `anchor` and `expected_revision`, or use:
 
